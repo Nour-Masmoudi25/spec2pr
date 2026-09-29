@@ -1,19 +1,17 @@
 import json
 import os
-import time
 import uuid
 
 from dotenv import load_dotenv
 from groq import Groq
 
-from sandbox import run_in_container
+from agent.sandbox import run_in_container
 
 load_dotenv()
 client = Groq(api_key=os.environ["GROQ_API_KEY"])
 
-MODEL = "openai/gpt-oss-20b"  # same model you tested in smoke.py
+MODEL = "openai/gpt-oss-20b"
 STEP_LIMIT = 15
-
 COST_PER_1M_INPUT = 0.075
 COST_PER_1M_OUTPUT = 0.30
 
@@ -36,9 +34,7 @@ def run_agent(spec_text: str, workdir: str) -> dict:
     os.makedirs(f"runs/{run_id}", exist_ok=True)
     trace_path = f"runs/{run_id}/trace.jsonl"
 
-    messages = [
-        {"role": "user", "content": spec_text},
-    ]
+    messages = [{"role": "user", "content": spec_text}]
 
     for step in range(1, STEP_LIMIT + 1):
         response = client.chat.completions.create(
@@ -50,38 +46,44 @@ def run_agent(spec_text: str, workdir: str) -> dict:
         msg = response.choices[0].message
         usage = response.usage
 
-
         if not msg.tool_calls:
-            # Model is done — it answered in plain text instead of calling a tool.
-            log_step(trace_path, step, None, None, usage, "stopped: model gave a final answer")
+            log_step(trace_path, step, None, None, None, usage,
+                      "stopped: model gave a final answer")
             messages.append({"role": "assistant", "content": msg.content})
             return {"run_id": run_id, "status": "stopped_by_model", "steps": step}
 
-        # We only handle the first tool call per step, to keep this simple.
-        tool_call = msg.tool_calls[0]
-        args = json.loads(tool_call.function.arguments)
-        command = args["command"]
-
-        result = run_in_container(command, workdir)
-
-        log_step(trace_path, step, command, result["exit_code"], usage, None)
-
-        # Feed the model's own tool call back, then the result, so it has context.
+        # Echo the assistant's full set of tool calls back into the
+        # conversation once, then answer each one in turn.
         messages.append({
             "role": "assistant",
             "content": msg.content,
-            "tool_calls": [tool_call],
+            "tool_calls": msg.tool_calls,
         })
-        messages.append({
-            "role": "tool",
-            "tool_call_id": tool_call.id,
-            "content": result["output"],
-        })
+
+        for tool_call in msg.tool_calls:
+            try:
+                args = json.loads(tool_call.function.arguments)
+                command = args["command"]
+            except (json.JSONDecodeError, KeyError, TypeError) as e:
+                # Bad arguments from the model: report it as a failed tool
+                # result instead of crashing, so the model can try again.
+                result = {"exit_code": -1, "output": f"[invalid tool arguments: {e}]", "truncated": False}
+                command = None
+            else:
+                result = run_in_container(command, workdir)
+
+            log_step(trace_path, step, command, result["exit_code"], result["output"], usage, None)
+
+            messages.append({
+                "role": "tool",
+                "tool_call_id": tool_call.id,
+                "content": result["output"],
+            })
 
     return {"run_id": run_id, "status": "step_limit_reached", "steps": STEP_LIMIT}
 
 
-def log_step(trace_path, step, command, exit_code, usage, note):
+def log_step(trace_path, step, command, exit_code, output, usage, note):
     if usage:
         cost = (
             usage.prompt_tokens / 1_000_000 * COST_PER_1M_INPUT
@@ -94,6 +96,7 @@ def log_step(trace_path, step, command, exit_code, usage, note):
         "step": step,
         "command": command,
         "exit_code": exit_code,
+        "output": output,
         "tokens_in": usage.prompt_tokens if usage else None,
         "tokens_out": usage.completion_tokens if usage else None,
         "cost_usd": round(cost, 6) if cost is not None else None,
