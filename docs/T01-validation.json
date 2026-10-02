@@ -1,0 +1,20 @@
+[
+  {
+    "task_id": "T01",
+    "valid": true,
+    "fail_to_pass": 16,
+    "pass_to_pass": 127,
+    "base_tree_sha256": "95dcea8195b236dd446568c8a0b92d1608e8accaabf8cdada612c2c33e447f33",
+    "base_commit": null,
+    "runtime": "3.13.1",
+    "baseline_results": {
+      "hidden_failed": 16,
+      "visible_passed": 127
+    },
+    "reference_results": {
+      "hidden_passed": 16,
+      "visible_passed": 127
+    },
+    "execution": "local, provisional (not Docker)"
+  }
+]
