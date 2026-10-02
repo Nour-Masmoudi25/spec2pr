@@ -1,0 +1,66 @@
+{
+  "task_id": "T01",
+  "base_commit": null,
+  "base_tree_sha256": "95dcea8195b236dd446568c8a0b92d1608e8accaabf8cdada612c2c33e447f33",
+  "baseline_status": "provisional local content snapshot; Git commit and Python 3.12 pending",
+  "allowed_paths": [
+    "src/tasklib/"
+  ],
+  "fail_to_pass": [
+    "hidden_tests/test_filter_priority.py::test_matches_requested_priority[low]",
+    "hidden_tests/test_filter_priority.py::test_matches_requested_priority[medium]",
+    "hidden_tests/test_filter_priority.py::test_matches_requested_priority[high]",
+    "hidden_tests/test_filter_priority.py::test_rejects_unsupported_strings[unknown]",
+    "hidden_tests/test_filter_priority.py::test_rejects_unsupported_strings[uppercase]",
+    "hidden_tests/test_filter_priority.py::test_rejects_unsupported_strings[whitespace]",
+    "hidden_tests/test_filter_priority.py::test_rejects_unsupported_strings[empty]",
+    "hidden_tests/test_filter_priority.py::test_empty_store_returns_empty_list[low]",
+    "hidden_tests/test_filter_priority.py::test_empty_store_returns_empty_list[medium]",
+    "hidden_tests/test_filter_priority.py::test_empty_store_returns_empty_list[high]",
+    "hidden_tests/test_filter_priority.py::test_no_matching_tasks_returns_empty_list",
+    "hidden_tests/test_filter_priority.py::test_preserves_creation_order",
+    "hidden_tests/test_filter_priority.py::test_includes_completed_and_incomplete_tasks",
+    "hidden_tests/test_filter_priority.py::test_returns_original_objects_in_fresh_lists",
+    "hidden_tests/test_filter_priority.py::test_does_not_change_tasks_order_or_id_allocation",
+    "hidden_tests/test_filter_priority.py::test_rejected_priority_leaves_store_unchanged"
+  ],
+  "pass_to_pass": {
+    "policy": "all cases collected from baseline tests/ must pass before and after"
+  },
+  "acceptance_map": {
+    "AC-1": [
+      "hidden_tests/test_filter_priority.py::test_matches_requested_priority[low]",
+      "hidden_tests/test_filter_priority.py::test_matches_requested_priority[medium]",
+      "hidden_tests/test_filter_priority.py::test_matches_requested_priority[high]",
+      "hidden_tests/test_filter_priority.py::test_rejects_unsupported_strings[unknown]",
+      "hidden_tests/test_filter_priority.py::test_rejects_unsupported_strings[uppercase]",
+      "hidden_tests/test_filter_priority.py::test_rejects_unsupported_strings[whitespace]",
+      "hidden_tests/test_filter_priority.py::test_rejects_unsupported_strings[empty]"
+    ],
+    "AC-2": [
+      "hidden_tests/test_filter_priority.py::test_matches_requested_priority[low]",
+      "hidden_tests/test_filter_priority.py::test_matches_requested_priority[medium]",
+      "hidden_tests/test_filter_priority.py::test_matches_requested_priority[high]"
+    ],
+    "AC-3": [
+      "hidden_tests/test_filter_priority.py::test_preserves_creation_order"
+    ],
+    "AC-4": [
+      "hidden_tests/test_filter_priority.py::test_empty_store_returns_empty_list[low]",
+      "hidden_tests/test_filter_priority.py::test_empty_store_returns_empty_list[medium]",
+      "hidden_tests/test_filter_priority.py::test_empty_store_returns_empty_list[high]",
+      "hidden_tests/test_filter_priority.py::test_no_matching_tasks_returns_empty_list"
+    ],
+    "AC-5": [
+      "hidden_tests/test_filter_priority.py::test_includes_completed_and_incomplete_tasks"
+    ],
+    "AC-6": [
+      "hidden_tests/test_filter_priority.py::test_returns_original_objects_in_fresh_lists",
+      "hidden_tests/test_filter_priority.py::test_does_not_change_tasks_order_or_id_allocation",
+      "hidden_tests/test_filter_priority.py::test_rejected_priority_leaves_store_unchanged"
+    ],
+    "AC-7": [
+      "tests/ (entire visible regression suite)"
+    ]
+  }
+}

@@ -1,0 +1,14 @@
+--- a/src/tasklib/store.py
++++ b/src/tasklib/store.py
+@@ -53,6 +53,11 @@
+         object in it does affect that task, matching get's reference semantics.
+         """
+         return list(self._tasks.values())
++
++    def filter_by_priority(self, priority: str) -> list[Task]:
++        """Return matching live tasks in creation order in a fresh list."""
++        requested = validate_priority(priority)
++        return [task for task in self._tasks.values() if task.priority == requested]
+ 
+     def complete(self, task_id: int) -> Task:
+         """Mark a task complete and return it.
