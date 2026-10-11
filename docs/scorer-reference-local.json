@@ -1,0 +1,350 @@
+{
+  "agent": "reference",
+  "backend": "local",
+  "repetitions": 3,
+  "evaluation_commit": "3f2df171ed97dd8cbae4fd48b2de78d903ee9c7e",
+  "working_tree_dirty": false,
+  "created_at": "2026-10-11T16:34:38.408740+00:00",
+  "host_python": "3.13.1",
+  "image": null,
+  "runs": 15,
+  "passed": 15,
+  "pass_rate": 1.0,
+  "tasks_solved_at_least_once": 5,
+  "all_repetitions_pass_rate": 1.0,
+  "median_cost_usd": 0,
+  "runs_with_known_cost": 15,
+  "median_steps": 0,
+  "results": [
+    {
+      "task_id": "T01",
+      "run_id": "T01-1",
+      "agent": "reference",
+      "backend": "local",
+      "base_commit": "dd0519be0d15a7b370dadb342319b982b2bfcaef",
+      "passed": true,
+      "status": "passed",
+      "steps": 0,
+      "cost_usd": 0,
+      "agent_status": "control_no_model",
+      "tokens_in": 0,
+      "tokens_out": 0,
+      "fail_to_pass": {
+        "passed": 16,
+        "total": 16
+      },
+      "pass_to_pass": {
+        "passed": 127,
+        "total": 127
+      }
+    },
+    {
+      "task_id": "T01",
+      "run_id": "T01-2",
+      "agent": "reference",
+      "backend": "local",
+      "base_commit": "dd0519be0d15a7b370dadb342319b982b2bfcaef",
+      "passed": true,
+      "status": "passed",
+      "steps": 0,
+      "cost_usd": 0,
+      "agent_status": "control_no_model",
+      "tokens_in": 0,
+      "tokens_out": 0,
+      "fail_to_pass": {
+        "passed": 16,
+        "total": 16
+      },
+      "pass_to_pass": {
+        "passed": 127,
+        "total": 127
+      }
+    },
+    {
+      "task_id": "T01",
+      "run_id": "T01-3",
+      "agent": "reference",
+      "backend": "local",
+      "base_commit": "dd0519be0d15a7b370dadb342319b982b2bfcaef",
+      "passed": true,
+      "status": "passed",
+      "steps": 0,
+      "cost_usd": 0,
+      "agent_status": "control_no_model",
+      "tokens_in": 0,
+      "tokens_out": 0,
+      "fail_to_pass": {
+        "passed": 16,
+        "total": 16
+      },
+      "pass_to_pass": {
+        "passed": 127,
+        "total": 127
+      }
+    },
+    {
+      "task_id": "T02",
+      "run_id": "T02-1",
+      "agent": "reference",
+      "backend": "local",
+      "base_commit": "dd0519be0d15a7b370dadb342319b982b2bfcaef",
+      "passed": true,
+      "status": "passed",
+      "steps": 0,
+      "cost_usd": 0,
+      "agent_status": "control_no_model",
+      "tokens_in": 0,
+      "tokens_out": 0,
+      "fail_to_pass": {
+        "passed": 14,
+        "total": 14
+      },
+      "pass_to_pass": {
+        "passed": 127,
+        "total": 127
+      }
+    },
+    {
+      "task_id": "T02",
+      "run_id": "T02-2",
+      "agent": "reference",
+      "backend": "local",
+      "base_commit": "dd0519be0d15a7b370dadb342319b982b2bfcaef",
+      "passed": true,
+      "status": "passed",
+      "steps": 0,
+      "cost_usd": 0,
+      "agent_status": "control_no_model",
+      "tokens_in": 0,
+      "tokens_out": 0,
+      "fail_to_pass": {
+        "passed": 14,
+        "total": 14
+      },
+      "pass_to_pass": {
+        "passed": 127,
+        "total": 127
+      }
+    },
+    {
+      "task_id": "T02",
+      "run_id": "T02-3",
+      "agent": "reference",
+      "backend": "local",
+      "base_commit": "dd0519be0d15a7b370dadb342319b982b2bfcaef",
+      "passed": true,
+      "status": "passed",
+      "steps": 0,
+      "cost_usd": 0,
+      "agent_status": "control_no_model",
+      "tokens_in": 0,
+      "tokens_out": 0,
+      "fail_to_pass": {
+        "passed": 14,
+        "total": 14
+      },
+      "pass_to_pass": {
+        "passed": 127,
+        "total": 127
+      }
+    },
+    {
+      "task_id": "T03",
+      "run_id": "T03-1",
+      "agent": "reference",
+      "backend": "local",
+      "base_commit": "dd0519be0d15a7b370dadb342319b982b2bfcaef",
+      "passed": true,
+      "status": "passed",
+      "steps": 0,
+      "cost_usd": 0,
+      "agent_status": "control_no_model",
+      "tokens_in": 0,
+      "tokens_out": 0,
+      "fail_to_pass": {
+        "passed": 16,
+        "total": 16
+      },
+      "pass_to_pass": {
+        "passed": 127,
+        "total": 127
+      }
+    },
+    {
+      "task_id": "T03",
+      "run_id": "T03-2",
+      "agent": "reference",
+      "backend": "local",
+      "base_commit": "dd0519be0d15a7b370dadb342319b982b2bfcaef",
+      "passed": true,
+      "status": "passed",
+      "steps": 0,
+      "cost_usd": 0,
+      "agent_status": "control_no_model",
+      "tokens_in": 0,
+      "tokens_out": 0,
+      "fail_to_pass": {
+        "passed": 16,
+        "total": 16
+      },
+      "pass_to_pass": {
+        "passed": 127,
+        "total": 127
+      }
+    },
+    {
+      "task_id": "T03",
+      "run_id": "T03-3",
+      "agent": "reference",
+      "backend": "local",
+      "base_commit": "dd0519be0d15a7b370dadb342319b982b2bfcaef",
+      "passed": true,
+      "status": "passed",
+      "steps": 0,
+      "cost_usd": 0,
+      "agent_status": "control_no_model",
+      "tokens_in": 0,
+      "tokens_out": 0,
+      "fail_to_pass": {
+        "passed": 16,
+        "total": 16
+      },
+      "pass_to_pass": {
+        "passed": 127,
+        "total": 127
+      }
+    },
+    {
+      "task_id": "T04",
+      "run_id": "T04-1",
+      "agent": "reference",
+      "backend": "local",
+      "base_commit": "dd0519be0d15a7b370dadb342319b982b2bfcaef",
+      "passed": true,
+      "status": "passed",
+      "steps": 0,
+      "cost_usd": 0,
+      "agent_status": "control_no_model",
+      "tokens_in": 0,
+      "tokens_out": 0,
+      "fail_to_pass": {
+        "passed": 8,
+        "total": 8
+      },
+      "pass_to_pass": {
+        "passed": 127,
+        "total": 127
+      }
+    },
+    {
+      "task_id": "T04",
+      "run_id": "T04-2",
+      "agent": "reference",
+      "backend": "local",
+      "base_commit": "dd0519be0d15a7b370dadb342319b982b2bfcaef",
+      "passed": true,
+      "status": "passed",
+      "steps": 0,
+      "cost_usd": 0,
+      "agent_status": "control_no_model",
+      "tokens_in": 0,
+      "tokens_out": 0,
+      "fail_to_pass": {
+        "passed": 8,
+        "total": 8
+      },
+      "pass_to_pass": {
+        "passed": 127,
+        "total": 127
+      }
+    },
+    {
+      "task_id": "T04",
+      "run_id": "T04-3",
+      "agent": "reference",
+      "backend": "local",
+      "base_commit": "dd0519be0d15a7b370dadb342319b982b2bfcaef",
+      "passed": true,
+      "status": "passed",
+      "steps": 0,
+      "cost_usd": 0,
+      "agent_status": "control_no_model",
+      "tokens_in": 0,
+      "tokens_out": 0,
+      "fail_to_pass": {
+        "passed": 8,
+        "total": 8
+      },
+      "pass_to_pass": {
+        "passed": 127,
+        "total": 127
+      }
+    },
+    {
+      "task_id": "T05",
+      "run_id": "T05-1",
+      "agent": "reference",
+      "backend": "local",
+      "base_commit": "dd0519be0d15a7b370dadb342319b982b2bfcaef",
+      "passed": true,
+      "status": "passed",
+      "steps": 0,
+      "cost_usd": 0,
+      "agent_status": "control_no_model",
+      "tokens_in": 0,
+      "tokens_out": 0,
+      "fail_to_pass": {
+        "passed": 11,
+        "total": 11
+      },
+      "pass_to_pass": {
+        "passed": 127,
+        "total": 127
+      }
+    },
+    {
+      "task_id": "T05",
+      "run_id": "T05-2",
+      "agent": "reference",
+      "backend": "local",
+      "base_commit": "dd0519be0d15a7b370dadb342319b982b2bfcaef",
+      "passed": true,
+      "status": "passed",
+      "steps": 0,
+      "cost_usd": 0,
+      "agent_status": "control_no_model",
+      "tokens_in": 0,
+      "tokens_out": 0,
+      "fail_to_pass": {
+        "passed": 11,
+        "total": 11
+      },
+      "pass_to_pass": {
+        "passed": 127,
+        "total": 127
+      }
+    },
+    {
+      "task_id": "T05",
+      "run_id": "T05-3",
+      "agent": "reference",
+      "backend": "local",
+      "base_commit": "dd0519be0d15a7b370dadb342319b982b2bfcaef",
+      "passed": true,
+      "status": "passed",
+      "steps": 0,
+      "cost_usd": 0,
+      "agent_status": "control_no_model",
+      "tokens_in": 0,
+      "tokens_out": 0,
+      "fail_to_pass": {
+        "passed": 11,
+        "total": 11
+      },
+      "pass_to_pass": {
+        "passed": 127,
+        "total": 127
+      }
+    }
+  ]
+}

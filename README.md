@@ -10,6 +10,9 @@ Person B's target library and five-task benchmark.
 Use Python 3.13 locally, Git, and Docker Desktop running Linux containers.
 The sandbox uses Python 3.12.
 
+Until PR #1 is merged, check out `codex/person-b-day2` after cloning to use
+the complete benchmark described here.
+
 ```powershell
 git clone https://github.com/Nour-Masmoudi25/spec2pr.git
 cd spec2pr

@@ -22,6 +22,21 @@ API configuration. Reference solutions are not evidence of agent performance.
 - Offline tests verify a fresh agent workspace without hidden tests/reference
   patches and one trace line per model request, including multiple-tool replies.
 
+## Scorer controls (no model)
+
+Verified on clean evaluation commit `3f2df171ed97dd8cbae4fd48b2de78d903ee9c7e`,
+Python 3.13.1, local backend:
+
+| Control | Attempts | Passed | Median model calls | API cost |
+|---|---:|---:|---:|---:|
+| Reference patches | 15 | 15 | 0 | $0 |
+| Unchanged baseline (noop) | 5 | 0 | 0 | $0 |
+
+Evidence: [reference report](docs/scorer-reference-local.json) and
+[noop report](docs/scorer-noop-local.json). The reference control passes all
+three repetitions for all five tasks. These rows verify the scorer; they do
+not fill the real-agent row 0.
+
 ## Pending joint checks
 
 - Validate all five tasks in the Python 3.12 Docker image.
