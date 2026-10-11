@@ -1,5 +1,9 @@
 # Week 1 benchmark plan
 
+> Historical Day 1/Day 2 notes below. The current five-task implementation and
+> remaining integration work are described in [the benchmark guide](../bench/README.md)
+> and [RESULTS.md](../RESULTS.md).
+
 ## Target library
 
 tasklib is a small in-memory task-management library.

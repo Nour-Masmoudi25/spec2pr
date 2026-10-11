@@ -1,113 +1,104 @@
+"""Single bash-tool baseline; one JSONL record per model request."""
 import json
-import os
+from pathlib import Path
 import uuid
-
-from dotenv import load_dotenv
-from groq import Groq
 
 from agent.sandbox import run_in_container
 
-load_dotenv()
-client = Groq(api_key=os.environ["GROQ_API_KEY"])
-
-MODEL = "openai/gpt-oss-20b"
-STEP_LIMIT = 15
-COST_PER_1M_INPUT = 0.075
-COST_PER_1M_OUTPUT = 0.30
-
-TOOLS = [{
-    "type": "function",
-    "function": {
-        "name": "bash",
-        "description": "Run a shell command inside the sandbox and return its output.",
-        "parameters": {
-            "type": "object",
-            "properties": {"command": {"type": "string"}},
-            "required": ["command"],
-        },
-    },
-}]
+STEP_LIMIT = 20
+MODEL = "openai/gpt-oss-120b"
+# Configured estimates inherited from the prototype, not provider invoices.
+COST_PER_1M_INPUT = 0.15
+COST_PER_1M_OUTPUT = 0.60
+TOOLS = [{"type": "function", "function": {
+    "name": "bash",
+    "description": "Run a shell command inside the sandbox and return its output.",
+    "parameters": {"type": "object", "properties": {"command": {"type": "string"}},
+                   "required": ["command"]},
+}}]
 
 
-def run_agent(spec_text: str, workdir: str) -> dict:
-    run_id = str(uuid.uuid4())[:8]
-    os.makedirs(f"runs/{run_id}", exist_ok=True)
-    trace_path = f"runs/{run_id}/trace.jsonl"
+def run_agent(spec_text, workdir, *, run_dir=None, model_client=None,
+              command_runner=None, step_limit=STEP_LIMIT):
+    """Run against a fresh checkout prepared by bench/run.py.
 
+    Optional dependencies are loaded only for real model runs. Injection lets
+    the scorer select its Docker limits and tests exercise logging offline.
+    Every API attempt, including a rejected request, consumes one step.
+    """
+    if step_limit < 1:
+        raise ValueError("step_limit must be positive")
+    if model_client is None:
+        from dotenv import load_dotenv
+        from groq import Groq
+        load_dotenv()
+        model_client = Groq(timeout=60, max_retries=0)
+    command_runner = command_runner or run_in_container
+    directory = Path(run_dir) if run_dir else Path("runs") / uuid.uuid4().hex[:8]
+    directory.mkdir(parents=True, exist_ok=True)
+    trace = directory / "trace.jsonl"
+    trace.touch(exist_ok=False)
     messages = [{"role": "user", "content": spec_text}]
-
-    for step in range(1, STEP_LIMIT + 1):
-        response = client.chat.completions.create(
-            model=MODEL,
-            messages=messages,
-            tools=TOOLS,
-            tool_choice="auto",
-        )
-        msg = response.choices[0].message
+    malformed = 0
+    status = "step_limit_reached"
+    for step in range(1, step_limit + 1):
+        row = {"step": step, "model": MODEL, "tokens_in": None, "tokens_out": None,
+               "cost_usd": None, "tools": [], "note": None,
+               "rates_per_million": {"input": COST_PER_1M_INPUT, "output": COST_PER_1M_OUTPUT}}
+        try:
+            response = model_client.chat.completions.create(
+                model=MODEL, messages=messages, tools=TOOLS, tool_choice="auto")
+        except Exception as error:
+            row["note"] = "API error: " + type(error).__name__
+            with trace.open("a", encoding="utf-8") as stream:
+                stream.write(json.dumps(row, ensure_ascii=False) + "\n")
+            if type(error).__name__ == "BadRequestError":
+                malformed += 1
+                if malformed < 3:
+                    continue
+            status = "api_error"
+            break
         usage = response.usage
-
-        if not msg.tool_calls:
-            log_step(trace_path, step, None, None, None, usage,
-                      "stopped: model gave a final answer")
-            messages.append({"role": "assistant", "content": msg.content})
-            return {"run_id": run_id, "status": "stopped_by_model", "steps": step}
-
-        # Echo the assistant's full set of tool calls back into the
-        # conversation once, then answer each one in turn.
-        messages.append({
-            "role": "assistant",
-            "content": msg.content,
-            "tool_calls": msg.tool_calls,
-        })
-
-        for tool_call in msg.tool_calls:
-            try:
-                args = json.loads(tool_call.function.arguments)
-                command = args["command"]
-            except (json.JSONDecodeError, KeyError, TypeError) as e:
-                # Bad arguments from the model: report it as a failed tool
-                # result instead of crashing, so the model can try again.
-                result = {"exit_code": -1, "output": f"[invalid tool arguments: {e}]", "truncated": False}
+        if usage is not None:
+            row["tokens_in"] = usage.prompt_tokens
+            row["tokens_out"] = usage.completion_tokens
+            row["cost_usd"] = (usage.prompt_tokens * COST_PER_1M_INPUT
+                               + usage.completion_tokens * COST_PER_1M_OUTPUT) / 1_000_000
+        try:
+            msg = response.choices[0].message
+            row["assistant"] = msg.content
+            calls = msg.tool_calls or []
+            messages.append({"role": "assistant", "content": msg.content,
+                             **({"tool_calls": [call.model_dump() for call in calls]} if calls else {})})
+            if not calls:
+                status = "stopped_by_model"
+                row["note"] = "Model returned a final answer"
+            for call in calls:
                 command = None
-            else:
-                result = run_in_container(command, workdir)
-
-            log_step(trace_path, step, command, result["exit_code"], result["output"], usage, None)
-
-            messages.append({
-                "role": "tool",
-                "tool_call_id": tool_call.id,
-                "content": result["output"],
-            })
-
-    return {"run_id": run_id, "status": "step_limit_reached", "steps": STEP_LIMIT}
-
-
-def log_step(trace_path, step, command, exit_code, output, usage, note):
-    if usage:
-        cost = (
-            usage.prompt_tokens / 1_000_000 * COST_PER_1M_INPUT
-            + usage.completion_tokens / 1_000_000 * COST_PER_1M_OUTPUT
-        )
-    else:
-        cost = None
-
-    line = {
-        "step": step,
-        "command": command,
-        "exit_code": exit_code,
-        "output": output,
-        "tokens_in": usage.prompt_tokens if usage else None,
-        "tokens_out": usage.completion_tokens if usage else None,
-        "cost_usd": round(cost, 6) if cost is not None else None,
-        "note": note,
-    }
-    with open(trace_path, "a") as f:
-        f.write(json.dumps(line) + "\n")
+                try:
+                    args = json.loads(call.function.arguments)
+                    command = args["command"]
+                    if call.function.name != "bash" or not isinstance(command, str):
+                        raise ValueError("Expected bash with a string command")
+                    result = command_runner(command, str(Path(workdir).resolve()))
+                except (ValueError, KeyError, TypeError) as error:
+                    result = {"exit_code": -1, "output": "Invalid tool arguments: " + str(error)}
+                row["tools"].append({"id": call.id, "input": call.function.arguments,
+                                     "command": command, **result})
+                messages.append({"role": "tool", "tool_call_id": call.id,
+                                 "content": json.dumps(result, ensure_ascii=False)})
+        except Exception as error:
+            row["note"] = "Agent error: " + type(error).__name__
+            status = "agent_error"
+        finally:
+            with trace.open("a", encoding="utf-8") as stream:
+                stream.write(json.dumps(row, ensure_ascii=False) + "\n")
+        if status != "step_limit_reached":
+            break
+    return {"run_id": directory.name, "status": status, "steps": step}
 
 
 if __name__ == "__main__":
-    scratch = os.path.abspath("scratch")
-    spec = "Create a file called hello.txt in the current directory containing the word hi. Then confirm it's there."
-    result = run_agent(spec, scratch)
-    print(result)
+    # Start fresh instead of appending to the historical task-1-workspace.
+    from bench.run import main
+    raise SystemExit(main(["--agent", "single", "--tasks", "bench/tasks/T01", "--n", "1"]))

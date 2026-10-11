@@ -3,8 +3,8 @@
 Every declared FAIL_TO_PASS case must fail normally on the baseline and pass
 with the reference patch. All visible cases must pass both times. Collection,
 setup, teardown errors and skipped cases do not count as legitimate failures.
-Uncommitted baselines are supported provisionally via a content fingerprint;
-this does not claim a Git baseline or a Docker execution has been verified.
+Every task records an immutable Git baseline and a content fingerprint.
+Local validation executes only trusted reference code; Docker is also supported.
 """
 import argparse
 import hashlib
@@ -15,6 +15,9 @@ import shutil
 import subprocess
 import sys
 import tempfile
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from runtime import docker_command, export_baseline, preflight
 
 
 PROJECT = Path(__file__).resolve().parents[1]
@@ -55,10 +58,11 @@ def copy_baseline(repo, destination):
         target.write_bytes(content)
 
 
-def run_tests(checkout, hidden, timeout):
+def run_tests(checkout, hidden, timeout, backend="local", image="sandbox:py312"):
     """Run source and tests in a disposable trusted evaluator checkout."""
     shutil.copytree(hidden, checkout / "hidden_tests")
     report = checkout / "case-report.json"
+    shutil.copyfile(BENCH / "_pytest_report.py", checkout / "_pytest_report.py")
     env = os.environ.copy()
     env["PYTHONPATH"] = os.pathsep.join([str(checkout / "src"), str(BENCH)])
     env["PYTEST_DISABLE_PLUGIN_AUTOLOAD"] = "1"
@@ -68,8 +72,13 @@ def run_tests(checkout, hidden, timeout):
     command = [sys.executable, "-m", "pytest", "-c", "pytest.ini",
                "-p", "_pytest_report", "-p", "no:cacheprovider",
                "--case-report", str(report), "tests", "hidden_tests", "-q"]
-    completed = subprocess.run(command, cwd=checkout, env=env, capture_output=True,
-                               text=True, encoding="utf-8", errors="replace", timeout=timeout)
+    if backend == "docker":
+        command[0] = "python"
+        command[command.index("--case-report") + 1] = "/workspace/case-report.json"
+        completed = docker_command(checkout, command, timeout, image)
+    else:
+        completed = subprocess.run(command, cwd=checkout, env=env, capture_output=True,
+                                   text=True, encoding="utf-8", errors="replace", timeout=timeout)
     if completed.returncode not in (0, 1) or not report.exists():
         raise ValueError("pytest infrastructure/collection error: " +
                          (completed.stdout + completed.stderr)[-3000:])
@@ -111,23 +120,26 @@ def apply_patch(checkout, patch_path):
                    capture_output=True, check=True, timeout=30)
     subprocess.run(["git", "apply", str(patch_path)], cwd=checkout,
                    capture_output=True, check=True, timeout=30)
+    normalized_patch.unlink()
 
 
-def validate_task(task_dir, repo, timeout=60):
+def prepare_baseline(metadata, repo, destination):
+    export_baseline(repo, metadata["base_commit"], destination)
+    if metadata["base_tree_sha256"] != fingerprint(destination):
+        raise ValueError("Baseline content differs from task.json fingerprint")
+
+
+def validate_task(task_dir, repo, timeout=60, backend="local", image="sandbox:py312"):
     metadata = json.loads((task_dir / "task.json").read_text(encoding="utf-8"))
     expected = metadata["fail_to_pass"]
     if not expected or len(expected) != len(set(expected)):
         raise ValueError("FAIL_TO_PASS must contain unique explicit test IDs")
-    if metadata["base_tree_sha256"] != fingerprint(repo):
-        raise ValueError("Baseline content differs from task.json fingerprint")
-    if metadata.get("base_commit") is not None:
-        raise ValueError("This provisional validator does not yet validate Git commit baselines")
     with tempfile.TemporaryDirectory(prefix="spec2pr-validate-") as temporary:
         base = Path(temporary) / "base"
         fixed = Path(temporary) / "fixed"
-        copy_baseline(repo, base)
-        copy_baseline(repo, fixed)
-        before = run_tests(base, task_dir / "hidden_tests", timeout)
+        prepare_baseline(metadata, repo, base)
+        copy_baseline(base, fixed)
+        before = run_tests(base, task_dir / "hidden_tests", timeout, backend, image)
         f2p = set(expected)
         hidden_ids = {node for node in before if node.startswith("hidden_tests/")}
         if hidden_ids != f2p:
@@ -135,22 +147,24 @@ def validate_task(task_dir, repo, timeout=60):
         visible_ids = {node for node in before if node.startswith("tests/")}
         if not visible_ids or set(before) != hidden_ids | visible_ids:
             raise ValueError("Expected visible and hidden tests only")
+        if visible_ids != set(metadata["pass_to_pass"]):
+            raise ValueError("Collected visible tests do not match declared PASS_TO_PASS IDs")
         already_pass = sorted(node for node in f2p if before[node] != "failed")
         if already_pass:
             raise ValueError("Hidden tests already pass on baseline: " + ", ".join(already_pass))
         if any(before[node] != "passed" for node in visible_ids):
             raise ValueError("Visible regression tests fail on baseline")
         apply_patch(fixed, task_dir / "reference.patch")
-        after = run_tests(fixed, task_dir / "hidden_tests", timeout)
+        after = run_tests(fixed, task_dir / "hidden_tests", timeout, backend, image)
         if set(after) != set(before) or any(state != "passed" for state in after.values()):
             raise ValueError("Reference patch does not pass the same complete test suite")
         return {"task_id": metadata["task_id"], "valid": True,
                 "fail_to_pass": len(f2p), "pass_to_pass": len(visible_ids),
                 "base_tree_sha256": metadata["base_tree_sha256"],
-                "base_commit": None, "runtime": sys.version.split()[0],
+                "base_commit": metadata["base_commit"], "host_runtime": sys.version.split()[0],
                 "baseline_results": {"hidden_failed": len(f2p), "visible_passed": len(visible_ids)},
                 "reference_results": {"hidden_passed": len(f2p), "visible_passed": len(visible_ids)},
-                "execution": "local, provisional (not Docker)"}
+                "execution": backend, "image": image if backend == "docker" else None}
 
 
 def main():
@@ -159,21 +173,25 @@ def main():
     parser.add_argument("--repo", type=Path, default=PROJECT / "target_repo")
     parser.add_argument("--timeout", type=int, default=60)
     parser.add_argument("--report", type=Path)
+    parser.add_argument("--backend", choices=["local", "docker"], default="local")
+    parser.add_argument("--image", default="sandbox:py312")
     args = parser.parse_args()
     tasks = args.tasks.resolve()
     task_dirs = [tasks] if (tasks / "task.json").exists() else sorted(p for p in tasks.iterdir() if p.is_dir())
     if not task_dirs:
         parser.error("No task directories found")
+    if args.backend == "docker":
+        preflight(args.image)
     results = []
     for task in task_dirs:
         try:
-            result = validate_task(task, args.repo.resolve(), args.timeout)
+            result = validate_task(task, args.repo.resolve(), args.timeout, args.backend, args.image)
         except (ValueError, KeyError, OSError, subprocess.SubprocessError) as error:
             result = {"task_id": task.name, "valid": False, "reason": str(error)}
         results.append(result)
         print(f"{result['task_id']}: " + ("VALID" if result["valid"] else "INVALID: " + result["reason"]))
     valid = sum(result["valid"] for result in results)
-    print(f"{valid}/{len(results)} tasks valid (local provisional validation)")
+    print(f"{valid}/{len(results)} tasks valid ({args.backend})")
     if args.report:
         args.report.write_text(json.dumps(results, indent=2) + "\n", encoding="utf-8")
     return 0 if valid == len(results) else 1
