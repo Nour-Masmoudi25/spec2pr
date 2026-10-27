@@ -27,10 +27,11 @@ TEXT_SUFFIXES = {".py", ".md", ".ini", ".txt", ".toml", ".json"}
 
 
 def baseline_files(repo):
-    return sorted(path for path in repo.rglob("*") if path.is_file()
-                  and not any(part in IGNORED for part in path.relative_to(repo).parts)
-                  and path.suffix != ".pyc")
-
+    files = [path for path in repo.rglob("*") if path.is_file()
+             and not any(part in IGNORED for part in path.relative_to(repo).parts)
+             and path.suffix != ".pyc"]
+    # Case-insensitive order so the fingerprint is identical on Windows and Linux.
+    return sorted(files, key=lambda path: path.relative_to(repo).as_posix().lower())
 
 def fingerprint(repo):
     """Hash names and content; normalize text newlines across Windows/Linux."""
