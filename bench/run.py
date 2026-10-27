@@ -14,6 +14,7 @@ sys.path.insert(0, str(PROJECT))
 sys.path.insert(0, str(PROJECT / "bench"))
 from runtime import docker_command, install_changes, preflight, source_changes
 from validate import apply_patch, copy_baseline, prepare_baseline, run_tests
+from prompt import build_prompt
 
 
 def trace_metrics(path):
@@ -52,8 +53,8 @@ def run_attempt(task, directory, *, agent, backend, timeout=60, image="sandbox:p
                     except subprocess.TimeoutExpired:
                         return {"exit_code": -1, "output": "Command timed out", "truncated": False}
 
-                spec = (task / "spec.md").read_text(encoding="utf-8")
-                spec += "\nWork in /workspace. Only edit src/tasklib/. Run python -m pytest tests -q to check existing behavior.\n"
+                spec = build_prompt((task / "spec.md").read_text(encoding="utf-8"), workspace,
+                                    forbidden_names=[p.name for p in (task / "hidden_tests").glob("*.py")])
                 outcome = run_agent(spec, str(workspace), run_dir=directory,
                                     command_runner=shell, step_limit=steps)
                 result["agent_status"] = outcome["status"]
