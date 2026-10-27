@@ -1,0 +1,46 @@
+{
+  "agent": "single",
+  "backend": "docker",
+  "repetitions": 1,
+  "evaluation_commit": "93c26aefc290c3f57ad0514b3bb214224f1f772f",
+  "working_tree_dirty": true,
+  "created_at": "2026-10-27T18:58:50.019238+00:00",
+  "host_python": "3.13.1",
+  "image": "sandbox:py312",
+  "runs": 1,
+  "passed": 1,
+  "pass_rate": 1.0,
+  "tasks_solved_at_least_once": 1,
+  "all_repetitions_pass_rate": 1.0,
+  "median_cost_usd": null,
+  "runs_with_known_cost": 0,
+  "median_known_cost_usd_lower_bound": 0.0036511499999999997,
+  "total_api_error_calls": 4,
+  "median_steps": 8,
+  "results": [
+    {
+      "task_id": "T02",
+      "run_id": "T02-1",
+      "agent": "single",
+      "backend": "docker",
+      "base_commit": "dd0519be0d15a7b370dadb342319b982b2bfcaef",
+      "passed": true,
+      "status": "passed",
+      "steps": 8,
+      "cost_usd": null,
+      "agent_status": "api_error",
+      "tokens_in": null,
+      "tokens_out": null,
+      "known_cost_usd": 0.0036511499999999997,
+      "api_error_calls": 4,
+      "fail_to_pass": {
+        "passed": 14,
+        "total": 14
+      },
+      "pass_to_pass": {
+        "passed": 127,
+        "total": 127
+      }
+    }
+  ]
+}
