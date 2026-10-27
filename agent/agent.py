@@ -1,5 +1,6 @@
 """Single bash-tool baseline; one JSONL record per model request."""
 import json
+import time
 from pathlib import Path
 import uuid
 
@@ -13,9 +14,39 @@ COST_PER_1M_OUTPUT = 0.60
 TOOLS = [{"type": "function", "function": {
     "name": "bash",
     "description": "Run a shell command inside the sandbox and return its output.",
-    "parameters": {"type": "object", "properties": {"command": {"type": "string"}},
-                   "required": ["command"]},
+    # gpt-oss keeps adding a "timeout" argument (and breaks the JSON when it
+    # has no slot for it), so we declare it. It is accepted and ignored: the
+    # sandbox always applies its own fixed time limit.
+    "parameters": {"type": "object", "properties": {
+        "command": {"type": "string", "description": "Shell command to run, as one JSON string (may contain newlines, e.g. a heredoc)."},
+        "timeout": {"type": "integer", "description": "Optional; ignored. The sandbox has a fixed limit."}},
+        "required": ["command"]},
 }}]
+
+
+def call_model(client, messages, max_waits=6):
+    """Call the model; on a rate limit, wait and try again (not a new step).
+
+    Returns (response, seconds_waited). Gives up after max_waits waits
+    (about 6 minutes at most), e.g. when the daily quota is used up.
+    """
+    waited = 0
+    for attempt in range(max_waits + 1):
+        try:
+            response = client.chat.completions.create(
+                model=MODEL, messages=messages, tools=TOOLS, tool_choice="auto")
+            return response, waited
+        except Exception as error:
+            if type(error).__name__ != "RateLimitError" or attempt == max_waits:
+                raise
+            try:
+                delay = float(error.response.headers.get("retry-after", 20))
+            except Exception:
+                delay = 20
+            delay = min(max(delay, 1), 60)
+            print(f"  rate limited, waiting {delay:.0f}s...", flush=True)
+            time.sleep(delay)
+            waited += delay
 
 
 def run_agent(spec_text, workdir, *, run_dir=None, model_client=None,
@@ -46,10 +77,12 @@ def run_agent(spec_text, workdir, *, run_dir=None, model_client=None,
                "cost_usd": None, "tools": [], "note": None,
                "rates_per_million": {"input": COST_PER_1M_INPUT, "output": COST_PER_1M_OUTPUT}}
         try:
-            response = model_client.chat.completions.create(
-                model=MODEL, messages=messages, tools=TOOLS, tool_choice="auto")
+            response, waited = call_model(model_client, messages)
+            if waited:
+                row["rate_limit_wait_s"] = waited
         except Exception as error:
-            row["note"] = "API error: " + type(error).__name__
+            # Keep the start of the message: it shows what the model tried to send.
+            row["note"] = "API error: " + type(error).__name__ + ": " + str(error)[:400]
             with trace.open("a", encoding="utf-8") as stream:
                 stream.write(json.dumps(row, ensure_ascii=False) + "\n")
             if type(error).__name__ == "BadRequestError":
@@ -58,6 +91,7 @@ def run_agent(spec_text, workdir, *, run_dir=None, model_client=None,
                     continue
             status = "api_error"
             break
+        malformed = 0  # only 3 broken calls IN A ROW end the run
         usage = response.usage
         if usage is not None:
             row["tokens_in"] = usage.prompt_tokens

@@ -14,6 +14,7 @@ sys.path.insert(0, str(PROJECT))
 sys.path.insert(0, str(PROJECT / "bench"))
 from runtime import docker_command, install_changes, preflight, source_changes
 from validate import apply_patch, copy_baseline, prepare_baseline, run_tests
+from prompt import build_prompt
 
 
 def trace_metrics(path):
@@ -23,7 +24,10 @@ def trace_metrics(path):
     return {"steps": len(rows),
             "cost_usd": sum(costs) if all(cost is not None for cost in costs) else None,
             "tokens_in": sum(r["tokens_in"] for r in rows) if all(r["tokens_in"] is not None for r in rows) else None,
-            "tokens_out": sum(r["tokens_out"] for r in rows) if all(r["tokens_out"] is not None for r in rows) else None}
+            "tokens_out": sum(r["tokens_out"] for r in rows) if all(r["tokens_out"] is not None for r in rows) else None,
+            # Lower bound: failed API calls report no usage, so they add nothing here.
+            "known_cost_usd": sum(cost for cost in costs if cost is not None),
+            "api_error_calls": sum(cost is None for cost in costs)}
 
 
 def run_attempt(task, directory, *, agent, backend, timeout=60, image="sandbox:py312", steps=20):
@@ -52,8 +56,8 @@ def run_attempt(task, directory, *, agent, backend, timeout=60, image="sandbox:p
                     except subprocess.TimeoutExpired:
                         return {"exit_code": -1, "output": "Command timed out", "truncated": False}
 
-                spec = (task / "spec.md").read_text(encoding="utf-8")
-                spec += "\nWork in /workspace. Only edit src/tasklib/. Run python -m pytest tests -q to check existing behavior.\n"
+                spec = build_prompt((task / "spec.md").read_text(encoding="utf-8"), workspace,
+                                    forbidden_names=[p.name for p in (task / "hidden_tests").glob("*.py")])
                 outcome = run_agent(spec, str(workspace), run_dir=directory,
                                     command_runner=shell, step_limit=steps)
                 result["agent_status"] = outcome["status"]
@@ -103,6 +107,8 @@ def summarize(results):
             "all_repetitions_pass_rate": consistent / len(tasks),
             "median_cost_usd": statistics.median(costs) if len(costs) == len(results) else None,
             "runs_with_known_cost": len(costs),
+            "median_known_cost_usd_lower_bound": statistics.median(r.get("known_cost_usd", 0) for r in results),
+            "total_api_error_calls": sum(r.get("api_error_calls", 0) for r in results),
             "median_steps": statistics.median(r["steps"] for r in results)}
 
 
@@ -158,6 +164,8 @@ def main(argv=None):
     (batch / "summary.json").write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8")
     print(f"Pass rate: {summary['passed']}/{summary['runs']} ({summary['pass_rate']:.1%}); "
           f"median cost USD (configured estimate): {summary['median_cost_usd']}; median steps: {summary['median_steps']}")
+    print(f"Median known cost USD (lower bound): {summary['median_known_cost_usd_lower_bound']:.5f}; "
+          f"failed API calls: {summary['total_api_error_calls']}")
     print(f"All {args.n} repetitions pass: {summary['all_repetitions_pass_rate']:.1%}")
     print(f"Report: {batch / 'summary.json'}")
     return 1 if any(r["status"] == "error" for r in results) else 0
