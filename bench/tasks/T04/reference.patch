@@ -1,0 +1,12 @@
+--- a/src/tasklib/store.py
++++ b/src/tasklib/store.py
+@@ -159,3 +159,9 @@
+             store._tasks[task.id] = task
+         store._next_id = counter
+         return store
++
++    def summary(self) -> dict[str, int]:
++        """Count current tasks without caching mutable results."""
++        total = len(self._tasks)
++        completed = sum(task.completed for task in self._tasks.values())
++        return {"total": total, "completed": completed, "pending": total - completed}

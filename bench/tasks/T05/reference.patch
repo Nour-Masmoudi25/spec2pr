@@ -1,0 +1,25 @@
+--- a/src/tasklib/store.py
++++ b/src/tasklib/store.py
+@@ -159,3 +159,22 @@
+             store._tasks[task.id] = task
+         store._next_id = counter
+         return store
++
++    def to_csv(self) -> str:
++        """Export CSV with explicit booleans and portable record terminators."""
++        import csv
++        import io
++
++        output = io.StringIO(newline="")
++        # CRLF makes csv quote both CR and LF in fields. Convert only record
++        # terminators while preserving embedded newlines in each field.
++        def write_row(values):
++            row = io.StringIO(newline="")
++            csv.writer(row, lineterminator="\r\n").writerow(values)
++            output.write(row.getvalue()[:-2] + "\n")
++
++        write_row(["id", "title", "priority", "completed"])
++        for task in self._tasks.values():
++            write_row([task.id, task.title, task.priority,
++                       "true" if task.completed else "false"])
++        return output.getvalue()

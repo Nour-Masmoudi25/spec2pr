@@ -160,11 +160,6 @@ class TaskStore:
         store._next_id = counter
         return store
 
-    def filter_by_priority(self, priority):
-        """Return tasks matching the given priority in creation order."""
-        priority = validate_priority(priority)
-        return [t for t in self.list_tasks() if t.priority == priority]
-
     def filter_by_priority(self, priority: str) -> list[Task]:
         """Return tasks matching the given priority in creation order.
 
