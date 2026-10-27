@@ -24,7 +24,10 @@ def trace_metrics(path):
     return {"steps": len(rows),
             "cost_usd": sum(costs) if all(cost is not None for cost in costs) else None,
             "tokens_in": sum(r["tokens_in"] for r in rows) if all(r["tokens_in"] is not None for r in rows) else None,
-            "tokens_out": sum(r["tokens_out"] for r in rows) if all(r["tokens_out"] is not None for r in rows) else None}
+            "tokens_out": sum(r["tokens_out"] for r in rows) if all(r["tokens_out"] is not None for r in rows) else None,
+            # Lower bound: failed API calls report no usage, so they add nothing here.
+            "known_cost_usd": sum(cost for cost in costs if cost is not None),
+            "api_error_calls": sum(cost is None for cost in costs)}
 
 
 def run_attempt(task, directory, *, agent, backend, timeout=60, image="sandbox:py312", steps=20):
@@ -104,6 +107,8 @@ def summarize(results):
             "all_repetitions_pass_rate": consistent / len(tasks),
             "median_cost_usd": statistics.median(costs) if len(costs) == len(results) else None,
             "runs_with_known_cost": len(costs),
+            "median_known_cost_usd_lower_bound": statistics.median(r.get("known_cost_usd", 0) for r in results),
+            "total_api_error_calls": sum(r.get("api_error_calls", 0) for r in results),
             "median_steps": statistics.median(r["steps"] for r in results)}
 
 
@@ -159,6 +164,8 @@ def main(argv=None):
     (batch / "summary.json").write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8")
     print(f"Pass rate: {summary['passed']}/{summary['runs']} ({summary['pass_rate']:.1%}); "
           f"median cost USD (configured estimate): {summary['median_cost_usd']}; median steps: {summary['median_steps']}")
+    print(f"Median known cost USD (lower bound): {summary['median_known_cost_usd_lower_bound']:.5f}; "
+          f"failed API calls: {summary['total_api_error_calls']}")
     print(f"All {args.n} repetitions pass: {summary['all_repetitions_pass_rate']:.1%}")
     print(f"Report: {batch / 'summary.json'}")
     return 1 if any(r["status"] == "error" for r in results) else 0
