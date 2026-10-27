@@ -29,7 +29,10 @@ with open('src/tasklib/store.py', 'a') as f:
 EOF
 ```
 
-- Then check your work with: python -m pytest tests -q
+- Tool arguments must be valid JSON: {"command": "<one string>"}. The command is a
+  plain string, never a list, and never a raw script outside the JSON string.
+- Then check your work with exactly: python -m pytest tests -q
+  (run it directly; do not wrap pytest inside a python script)
 - If tests fail, fix only your new method (you may rewrite just that method).
 - When all tests pass, reply with a one-line summary and make no tool call.
 - Only files under src/tasklib/ may change. Do not edit tests.

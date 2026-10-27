@@ -14,8 +14,13 @@ COST_PER_1M_OUTPUT = 0.60
 TOOLS = [{"type": "function", "function": {
     "name": "bash",
     "description": "Run a shell command inside the sandbox and return its output.",
-    "parameters": {"type": "object", "properties": {"command": {"type": "string"}},
-                   "required": ["command"]},
+    # gpt-oss keeps adding a "timeout" argument (and breaks the JSON when it
+    # has no slot for it), so we declare it. It is accepted and ignored: the
+    # sandbox always applies its own fixed time limit.
+    "parameters": {"type": "object", "properties": {
+        "command": {"type": "string", "description": "Shell command to run, as one JSON string (may contain newlines, e.g. a heredoc)."},
+        "timeout": {"type": "integer", "description": "Optional; ignored. The sandbox has a fixed limit."}},
+        "required": ["command"]},
 }}]
 
 
