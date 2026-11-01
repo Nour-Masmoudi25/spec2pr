@@ -1,0 +1,388 @@
+{
+  "agent": "single",
+  "backend": "docker",
+  "runs": 15,
+  "evaluation_commit": "834104fcf4b11b687a336b0e633daa1b6948be83",
+  "base_commit": "dd0519be0d15a7b370dadb342319b982b2bfcaef",
+  "working_tree_dirty": false,
+  "image": "sandbox:py312",
+  "passed": 12,
+  "pass_rate": 0.8,
+  "median_steps": 6,
+  "median_cost_usd": null,
+  "median_known_cost_usd_lower_bound": 0.004149,
+  "total_api_error_calls": 15,
+  "tasks_solved_at_least_once": 4,
+  "pass_cubed": 0.8,
+  "per_task_passed": {
+    "T01": 3,
+    "T02": 3,
+    "T03": 3,
+    "T04": 3,
+    "T05": 0
+  },
+  "sources": [
+    {
+      "task_id": "T01",
+      "summary": "C:\\Users\\LENOVO\\github\\spec2pr\\runs\\benchmarks\\20261027T192036Z-a2cd78af\\summary.json"
+    },
+    {
+      "task_id": "T02",
+      "summary": "C:\\Users\\LENOVO\\github\\spec2pr\\runs\\benchmarks\\20261028T222638Z-7615e9d3\\summary.json"
+    },
+    {
+      "task_id": "T03",
+      "summary": "C:\\Users\\LENOVO\\github\\spec2pr\\runs\\benchmarks\\20261028T224535Z-63183b8d\\summary.json"
+    },
+    {
+      "task_id": "T04",
+      "summary": "C:\\Users\\LENOVO\\github\\spec2pr\\runs\\benchmarks\\20261029T121733Z-d3d08b2b\\summary.json"
+    },
+    {
+      "task_id": "T05",
+      "summary": "C:\\Users\\LENOVO\\github\\spec2pr\\runs\\benchmarks\\20261030T143136Z-973a4f26\\summary.json"
+    }
+  ],
+  "run_records": [
+    {
+      "task_id": "T01",
+      "run_id": "T01-1",
+      "agent": "single",
+      "backend": "docker",
+      "base_commit": "dd0519be0d15a7b370dadb342319b982b2bfcaef",
+      "passed": true,
+      "status": "passed",
+      "steps": 3,
+      "cost_usd": 0.0025788,
+      "agent_status": "stopped_by_model",
+      "tokens_in": 14336,
+      "tokens_out": 714,
+      "known_cost_usd": 0.0025788,
+      "api_error_calls": 0,
+      "fail_to_pass": {
+        "passed": 16,
+        "total": 16
+      },
+      "pass_to_pass": {
+        "passed": 127,
+        "total": 127
+      }
+    },
+    {
+      "task_id": "T01",
+      "run_id": "T01-2",
+      "agent": "single",
+      "backend": "docker",
+      "base_commit": "dd0519be0d15a7b370dadb342319b982b2bfcaef",
+      "passed": true,
+      "status": "passed",
+      "steps": 8,
+      "cost_usd": null,
+      "agent_status": "api_error",
+      "tokens_in": null,
+      "tokens_out": null,
+      "known_cost_usd": 0.00696825,
+      "api_error_calls": 1,
+      "fail_to_pass": {
+        "passed": 16,
+        "total": 16
+      },
+      "pass_to_pass": {
+        "passed": 127,
+        "total": 127
+      }
+    },
+    {
+      "task_id": "T01",
+      "run_id": "T01-3",
+      "agent": "single",
+      "backend": "docker",
+      "base_commit": "dd0519be0d15a7b370dadb342319b982b2bfcaef",
+      "passed": true,
+      "status": "passed",
+      "steps": 3,
+      "cost_usd": 0.00243,
+      "agent_status": "stopped_by_model",
+      "tokens_in": 14408,
+      "tokens_out": 448,
+      "known_cost_usd": 0.00243,
+      "api_error_calls": 0,
+      "fail_to_pass": {
+        "passed": 16,
+        "total": 16
+      },
+      "pass_to_pass": {
+        "passed": 127,
+        "total": 127
+      }
+    },
+    {
+      "task_id": "T02",
+      "run_id": "T02-1",
+      "agent": "single",
+      "backend": "docker",
+      "base_commit": "dd0519be0d15a7b370dadb342319b982b2bfcaef",
+      "passed": true,
+      "status": "passed",
+      "steps": 3,
+      "cost_usd": 0.00253695,
+      "agent_status": "stopped_by_model",
+      "tokens_in": 14409,
+      "tokens_out": 626,
+      "known_cost_usd": 0.00253695,
+      "api_error_calls": 0,
+      "fail_to_pass": {
+        "passed": 14,
+        "total": 14
+      },
+      "pass_to_pass": {
+        "passed": 127,
+        "total": 127
+      }
+    },
+    {
+      "task_id": "T02",
+      "run_id": "T02-2",
+      "agent": "single",
+      "backend": "docker",
+      "base_commit": "dd0519be0d15a7b370dadb342319b982b2bfcaef",
+      "passed": true,
+      "status": "passed",
+      "steps": 7,
+      "cost_usd": null,
+      "agent_status": "api_error",
+      "tokens_in": null,
+      "tokens_out": null,
+      "known_cost_usd": 0.0047991,
+      "api_error_calls": 2,
+      "fail_to_pass": {
+        "passed": 14,
+        "total": 14
+      },
+      "pass_to_pass": {
+        "passed": 127,
+        "total": 127
+      }
+    },
+    {
+      "task_id": "T02",
+      "run_id": "T02-3",
+      "agent": "single",
+      "backend": "docker",
+      "base_commit": "dd0519be0d15a7b370dadb342319b982b2bfcaef",
+      "passed": true,
+      "status": "passed",
+      "steps": 7,
+      "cost_usd": null,
+      "agent_status": "api_error",
+      "tokens_in": null,
+      "tokens_out": null,
+      "known_cost_usd": 0.0053736,
+      "api_error_calls": 2,
+      "fail_to_pass": {
+        "passed": 14,
+        "total": 14
+      },
+      "pass_to_pass": {
+        "passed": 127,
+        "total": 127
+      }
+    },
+    {
+      "task_id": "T03",
+      "run_id": "T03-1",
+      "agent": "single",
+      "backend": "docker",
+      "base_commit": "dd0519be0d15a7b370dadb342319b982b2bfcaef",
+      "passed": true,
+      "status": "passed",
+      "steps": 4,
+      "cost_usd": null,
+      "agent_status": "stopped_by_model",
+      "tokens_in": null,
+      "tokens_out": null,
+      "known_cost_usd": 0.0032385,
+      "api_error_calls": 1,
+      "fail_to_pass": {
+        "passed": 16,
+        "total": 16
+      },
+      "pass_to_pass": {
+        "passed": 127,
+        "total": 127
+      }
+    },
+    {
+      "task_id": "T03",
+      "run_id": "T03-2",
+      "agent": "single",
+      "backend": "docker",
+      "base_commit": "dd0519be0d15a7b370dadb342319b982b2bfcaef",
+      "passed": true,
+      "status": "passed",
+      "steps": 6,
+      "cost_usd": null,
+      "agent_status": "api_error",
+      "tokens_in": null,
+      "tokens_out": null,
+      "known_cost_usd": 0.005189249999999999,
+      "api_error_calls": 1,
+      "fail_to_pass": {
+        "passed": 16,
+        "total": 16
+      },
+      "pass_to_pass": {
+        "passed": 127,
+        "total": 127
+      }
+    },
+    {
+      "task_id": "T03",
+      "run_id": "T03-3",
+      "agent": "single",
+      "backend": "docker",
+      "base_commit": "dd0519be0d15a7b370dadb342319b982b2bfcaef",
+      "passed": true,
+      "status": "passed",
+      "steps": 3,
+      "cost_usd": 0.0025545,
+      "agent_status": "stopped_by_model",
+      "tokens_in": 14358,
+      "tokens_out": 668,
+      "known_cost_usd": 0.0025545,
+      "api_error_calls": 0,
+      "fail_to_pass": {
+        "passed": 16,
+        "total": 16
+      },
+      "pass_to_pass": {
+        "passed": 127,
+        "total": 127
+      }
+    },
+    {
+      "task_id": "T04",
+      "run_id": "T04-1",
+      "agent": "single",
+      "backend": "docker",
+      "base_commit": "dd0519be0d15a7b370dadb342319b982b2bfcaef",
+      "passed": true,
+      "status": "passed",
+      "steps": 6,
+      "cost_usd": null,
+      "agent_status": "api_error",
+      "tokens_in": null,
+      "tokens_out": null,
+      "known_cost_usd": 0.00505815,
+      "api_error_calls": 1,
+      "fail_to_pass": {
+        "passed": 8,
+        "total": 8
+      },
+      "pass_to_pass": {
+        "passed": 127,
+        "total": 127
+      }
+    },
+    {
+      "task_id": "T04",
+      "run_id": "T04-2",
+      "agent": "single",
+      "backend": "docker",
+      "base_commit": "dd0519be0d15a7b370dadb342319b982b2bfcaef",
+      "passed": true,
+      "status": "passed",
+      "steps": 3,
+      "cost_usd": 0.00233505,
+      "agent_status": "stopped_by_model",
+      "tokens_in": 14215,
+      "tokens_out": 338,
+      "known_cost_usd": 0.00233505,
+      "api_error_calls": 0,
+      "fail_to_pass": {
+        "passed": 8,
+        "total": 8
+      },
+      "pass_to_pass": {
+        "passed": 127,
+        "total": 127
+      }
+    },
+    {
+      "task_id": "T04",
+      "run_id": "T04-3",
+      "agent": "single",
+      "backend": "docker",
+      "base_commit": "dd0519be0d15a7b370dadb342319b982b2bfcaef",
+      "passed": true,
+      "status": "passed",
+      "steps": 8,
+      "cost_usd": null,
+      "agent_status": "api_error",
+      "tokens_in": null,
+      "tokens_out": null,
+      "known_cost_usd": 0.0056907,
+      "api_error_calls": 2,
+      "fail_to_pass": {
+        "passed": 8,
+        "total": 8
+      },
+      "pass_to_pass": {
+        "passed": 127,
+        "total": 127
+      }
+    },
+    {
+      "task_id": "T05",
+      "run_id": "T05-1",
+      "agent": "single",
+      "backend": "docker",
+      "base_commit": "dd0519be0d15a7b370dadb342319b982b2bfcaef",
+      "passed": false,
+      "status": "error",
+      "steps": 5,
+      "cost_usd": null,
+      "agent_status": "api_error",
+      "tokens_in": null,
+      "tokens_out": null,
+      "known_cost_usd": 0.004069799999999999,
+      "api_error_calls": 1,
+      "error": "rt TaskStore\nsrc/tasklib/__init__.py:34: in <module>\n    from .store import TaskStore\nE     File \"/workspace/src/tasklib/store.py\", line 184\nE       lineterminator='\nE                      ^\nE   SyntaxError: unterminated string literal (detected at line 184)\n_______________ ERROR collecting tests/test_store_operations.py ________________\n/usr/local/lib/python3.12/site-packages/_pytest/python.py:508: in importtestmodule\n    mod = import_path(\n/usr/local/lib/python3.12/site-packages/_pytest/pathlib.py:596: in import_path\n    importlib.import_module(module_name)\n/usr/local/lib/python3.12/importlib/__init__.py:90: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n<frozen importlib._bootstrap>:1387: in _gcd_import\n    ???\n<frozen importlib._bootstrap>:1360: in _find_and_load\n    ???\n<frozen importlib._bootstrap>:1331: in _find_and_load_unlocked\n    ???\n<frozen importlib._bootstrap>:935: in _load_unlocked\n    ???\n/usr/local/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:188: in exec_module\n    exec(co, module.__dict__)\ntests/test_store_operations.py:5: in <module>\n    from tasklib import TaskStore\nsrc/tasklib/__init__.py:34: in <module>\n    from .store import TaskStore\nE     File \"/workspace/src/tasklib/store.py\", line 184\nE       lineterminator='\nE                      ^\nE   SyntaxError: unterminated string literal (detected at line 184)\n_______________ ERROR collecting hidden_tests/test_acceptance.py _______________\n/usr/local/lib/python3.12/site-packages/_pytest/python.py:508: in importtestmodule\n    mod = import_path(\n/usr/local/lib/python3.12/site-packages/_pytest/pathlib.py:596: in import_path\n    importlib.import_module(module_name)\n/usr/local/lib/python3.12/importlib/__init__.py:90: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n<frozen importlib._bootstrap>:1387: in _gcd_import\n    ???\n<frozen importlib._bootstrap>:1360: in _find_and_load\n    ???\n<frozen importlib._bootstrap>:1331: in _find_and_load_unlocked\n    ???\n<frozen importlib._bootstrap>:935: in _load_unlocked\n    ???\n/usr/local/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:188: in exec_module\n    exec(co, module.__dict__)\nhidden_tests/test_acceptance.py:4: in <module>\n    from tasklib import TaskStore\nsrc/tasklib/__init__.py:34: in <module>\n    from .store import TaskStore\nE     File \"/workspace/src/tasklib/store.py\", line 184\nE       lineterminator='\nE                      ^\nE   SyntaxError: unterminated string literal (detected at line 184)\n=========================== short test summary info ============================\nERROR tests/test_models.py\nERROR tests/test_storage.py\nERROR tests/test_store.py\nERROR tests/test_store_operations.py\nERROR hidden_tests/test_acceptance.py\n!!!!!!!!!!!!!!!!!!! Interrupted: 5 errors during collection !!!!!!!!!!!!!!!!!!!!\n5 errors in 0.93s\n"
+    },
+    {
+      "task_id": "T05",
+      "run_id": "T05-2",
+      "agent": "single",
+      "backend": "docker",
+      "base_commit": "dd0519be0d15a7b370dadb342319b982b2bfcaef",
+      "passed": false,
+      "status": "error",
+      "steps": 7,
+      "cost_usd": null,
+      "agent_status": "api_error",
+      "tokens_in": null,
+      "tokens_out": null,
+      "known_cost_usd": 0.004149,
+      "api_error_calls": 3,
+      "error": "rt TaskStore\nsrc/tasklib/__init__.py:34: in <module>\n    from .store import TaskStore\nE     File \"/workspace/src/tasklib/store.py\", line 184\nE       lineterminator='\nE                      ^\nE   SyntaxError: unterminated string literal (detected at line 184)\n_______________ ERROR collecting tests/test_store_operations.py ________________\n/usr/local/lib/python3.12/site-packages/_pytest/python.py:508: in importtestmodule\n    mod = import_path(\n/usr/local/lib/python3.12/site-packages/_pytest/pathlib.py:596: in import_path\n    importlib.import_module(module_name)\n/usr/local/lib/python3.12/importlib/__init__.py:90: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n<frozen importlib._bootstrap>:1387: in _gcd_import\n    ???\n<frozen importlib._bootstrap>:1360: in _find_and_load\n    ???\n<frozen importlib._bootstrap>:1331: in _find_and_load_unlocked\n    ???\n<frozen importlib._bootstrap>:935: in _load_unlocked\n    ???\n/usr/local/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:188: in exec_module\n    exec(co, module.__dict__)\ntests/test_store_operations.py:5: in <module>\n    from tasklib import TaskStore\nsrc/tasklib/__init__.py:34: in <module>\n    from .store import TaskStore\nE     File \"/workspace/src/tasklib/store.py\", line 184\nE       lineterminator='\nE                      ^\nE   SyntaxError: unterminated string literal (detected at line 184)\n_______________ ERROR collecting hidden_tests/test_acceptance.py _______________\n/usr/local/lib/python3.12/site-packages/_pytest/python.py:508: in importtestmodule\n    mod = import_path(\n/usr/local/lib/python3.12/site-packages/_pytest/pathlib.py:596: in import_path\n    importlib.import_module(module_name)\n/usr/local/lib/python3.12/importlib/__init__.py:90: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n<frozen importlib._bootstrap>:1387: in _gcd_import\n    ???\n<frozen importlib._bootstrap>:1360: in _find_and_load\n    ???\n<frozen importlib._bootstrap>:1331: in _find_and_load_unlocked\n    ???\n<frozen importlib._bootstrap>:935: in _load_unlocked\n    ???\n/usr/local/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:188: in exec_module\n    exec(co, module.__dict__)\nhidden_tests/test_acceptance.py:4: in <module>\n    from tasklib import TaskStore\nsrc/tasklib/__init__.py:34: in <module>\n    from .store import TaskStore\nE     File \"/workspace/src/tasklib/store.py\", line 184\nE       lineterminator='\nE                      ^\nE   SyntaxError: unterminated string literal (detected at line 184)\n=========================== short test summary info ============================\nERROR tests/test_models.py\nERROR tests/test_storage.py\nERROR tests/test_store.py\nERROR tests/test_store_operations.py\nERROR hidden_tests/test_acceptance.py\n!!!!!!!!!!!!!!!!!!! Interrupted: 5 errors during collection !!!!!!!!!!!!!!!!!!!!\n5 errors in 0.91s\n"
+    },
+    {
+      "task_id": "T05",
+      "run_id": "T05-3",
+      "agent": "single",
+      "backend": "docker",
+      "base_commit": "dd0519be0d15a7b370dadb342319b982b2bfcaef",
+      "passed": false,
+      "status": "error",
+      "steps": 6,
+      "cost_usd": null,
+      "agent_status": "api_error",
+      "tokens_in": null,
+      "tokens_out": null,
+      "known_cost_usd": 0.0054873,
+      "api_error_calls": 1,
+      "error": "/usr/local/lib/python3.12/site-packages/_pytest/python.py:508: in importtestmodule\n    mod = import_path(\n/usr/local/lib/python3.12/site-packages/_pytest/pathlib.py:596: in import_path\n    importlib.import_module(module_name)\n/usr/local/lib/python3.12/importlib/__init__.py:90: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n<frozen importlib._bootstrap>:1387: in _gcd_import\n    ???\n<frozen importlib._bootstrap>:1360: in _find_and_load\n    ???\n<frozen importlib._bootstrap>:1331: in _find_and_load_unlocked\n    ???\n<frozen importlib._bootstrap>:935: in _load_unlocked\n    ???\n/usr/local/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:188: in exec_module\n    exec(co, module.__dict__)\ntests/test_store_operations.py:5: in <module>\n    from tasklib import TaskStore\nsrc/tasklib/__init__.py:34: in <module>\n    from .store import TaskStore\nE     File \"/workspace/src/tasklib/store.py\", line 169\nE       writer = csv.writer(output, delimiter=',', quotechar='\"', quoting=csv.QUOTE_MINIMAL, lineterminator='\nE                                                                                                           ^\nE   SyntaxError: unterminated string literal (detected at line 169)\n_______________ ERROR collecting hidden_tests/test_acceptance.py _______________\n/usr/local/lib/python3.12/site-packages/_pytest/python.py:508: in importtestmodule\n    mod = import_path(\n/usr/local/lib/python3.12/site-packages/_pytest/pathlib.py:596: in import_path\n    importlib.import_module(module_name)\n/usr/local/lib/python3.12/importlib/__init__.py:90: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n<frozen importlib._bootstrap>:1387: in _gcd_import\n    ???\n<frozen importlib._bootstrap>:1360: in _find_and_load\n    ???\n<frozen importlib._bootstrap>:1331: in _find_and_load_unlocked\n    ???\n<frozen importlib._bootstrap>:935: in _load_unlocked\n    ???\n/usr/local/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:188: in exec_module\n    exec(co, module.__dict__)\nhidden_tests/test_acceptance.py:4: in <module>\n    from tasklib import TaskStore\nsrc/tasklib/__init__.py:34: in <module>\n    from .store import TaskStore\nE     File \"/workspace/src/tasklib/store.py\", line 169\nE       writer = csv.writer(output, delimiter=',', quotechar='\"', quoting=csv.QUOTE_MINIMAL, lineterminator='\nE                                                                                                           ^\nE   SyntaxError: unterminated string literal (detected at line 169)\n=========================== short test summary info ============================\nERROR tests/test_models.py\nERROR tests/test_storage.py\nERROR tests/test_store.py\nERROR tests/test_store_operations.py\nERROR hidden_tests/test_acceptance.py\n!!!!!!!!!!!!!!!!!!! Interrupted: 5 errors during collection !!!!!!!!!!!!!!!!!!!!\n5 errors in 0.90s\n"
+    }
+  ],
+  "measurement_note": "Steps count trace rows; api_error_calls counts rows with unknown usage. The frozen agent does not log each internal rate-limit retry separately."
+}

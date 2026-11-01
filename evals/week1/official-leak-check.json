@@ -1,0 +1,29 @@
+{
+  "status": "clean",
+  "trace_files": 15,
+  "valid_json_rows": 79,
+  "occurrences": 0,
+  "matches": [],
+  "errors": [],
+  "checked_files": [
+    "C:\\Users\\LENOVO\\github\\spec2pr\\runs\\benchmarks\\20261027T192036Z-a2cd78af\\T01-1\\trace.jsonl",
+    "C:\\Users\\LENOVO\\github\\spec2pr\\runs\\benchmarks\\20261027T192036Z-a2cd78af\\T01-2\\trace.jsonl",
+    "C:\\Users\\LENOVO\\github\\spec2pr\\runs\\benchmarks\\20261027T192036Z-a2cd78af\\T01-3\\trace.jsonl",
+    "C:\\Users\\LENOVO\\github\\spec2pr\\runs\\benchmarks\\20261028T222638Z-7615e9d3\\T02-1\\trace.jsonl",
+    "C:\\Users\\LENOVO\\github\\spec2pr\\runs\\benchmarks\\20261028T222638Z-7615e9d3\\T02-2\\trace.jsonl",
+    "C:\\Users\\LENOVO\\github\\spec2pr\\runs\\benchmarks\\20261028T222638Z-7615e9d3\\T02-3\\trace.jsonl",
+    "C:\\Users\\LENOVO\\github\\spec2pr\\runs\\benchmarks\\20261028T224535Z-63183b8d\\T03-1\\trace.jsonl",
+    "C:\\Users\\LENOVO\\github\\spec2pr\\runs\\benchmarks\\20261028T224535Z-63183b8d\\T03-2\\trace.jsonl",
+    "C:\\Users\\LENOVO\\github\\spec2pr\\runs\\benchmarks\\20261028T224535Z-63183b8d\\T03-3\\trace.jsonl",
+    "C:\\Users\\LENOVO\\github\\spec2pr\\runs\\benchmarks\\20261029T121733Z-d3d08b2b\\T04-1\\trace.jsonl",
+    "C:\\Users\\LENOVO\\github\\spec2pr\\runs\\benchmarks\\20261029T121733Z-d3d08b2b\\T04-2\\trace.jsonl",
+    "C:\\Users\\LENOVO\\github\\spec2pr\\runs\\benchmarks\\20261029T121733Z-d3d08b2b\\T04-3\\trace.jsonl",
+    "C:\\Users\\LENOVO\\github\\spec2pr\\runs\\benchmarks\\20261030T143136Z-973a4f26\\T05-1\\trace.jsonl",
+    "C:\\Users\\LENOVO\\github\\spec2pr\\runs\\benchmarks\\20261030T143136Z-973a4f26\\T05-2\\trace.jsonl",
+    "C:\\Users\\LENOVO\\github\\spec2pr\\runs\\benchmarks\\20261030T143136Z-973a4f26\\T05-3\\trace.jsonl"
+  ],
+  "forbidden_names": [
+    "test_filter_priority.py",
+    "test_acceptance.py"
+  ]
+}

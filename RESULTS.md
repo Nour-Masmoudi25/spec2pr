@@ -1,48 +1,84 @@
-# Week 1 results
+# Results
 
-## Real agent benchmark
+## Row 0: single agent baseline (Week 1)
 
-| Row | Agent | Tasks × runs | Pass rate | Median cost (USD estimate) | Median model calls | Commit |
-|---|---|---|---|---|---|---|
-| 0 | Single agent | 5 × 3 planned | Not run | Not measured | Not measured | Pending |
+| Row | Agent | Tasks × runs | Pass rate | Median known cost (USD, lower bound) | Median logged steps | Tasks solved at least once | pass^3 | Commit |
+|---|---|---|---|---|---|---|---|---|
+| 0 | Single agent (one `bash` tool) | 5 × 3 | **12/15 (80.0%)** | 0.004149 | 6 | 4/5 | 80.0% | `834104fcf4b11b687a336b0e633daa1b6948be83` |
 
-No complete 15-run model batch has been executed here. Docker Desktop was
-started on 2026-10-11, but the Linux engine returned HTTP 500 on its info
-endpoint. The local environment also lacks the Groq/dotenv packages and project
-API configuration. Reference solutions are not evidence of agent performance.
+Runs were made between 2026-10-27 and 2026-10-30 on Windows with Docker Desktop,
+model `openai/gpt-oss-120b` through the Groq API, sandbox image `sandbox:py312`.
+All five official batches were run from the same commit with a clean working tree
+(`working_tree_dirty: false`). The numbers come from `bench/aggregate.py`, which
+refuses mixed commits, dirty trees and incomplete batches.
 
-## Verified locally
+How to read the columns:
 
-- Python 3.13.1: **153 tests pass** (127 library tests and 26 harness checks).
-- **5/5 tasks valid**: each of the 65 hidden cases fails before its reference
-  fix and passes afterward; all 127 visible cases pass in both states.
-- Baseline: `dd0519be0d15a7b370dadb342319b982b2bfcaef:target_repo`.
-- [Validation evidence](docs/benchmark-validation-local.json).
-- The validator rejects a hidden case that already passes on the baseline.
-- Offline tests verify a fresh agent workspace without hidden tests/reference
-  patches and one trace line per model request, including multiple-tool replies.
+- **Cost** is a lower bound. Model calls that Groq refused report no token usage,
+  so their cost is unknown and left out; the full billed cost is unknown. The
+  configured rates are $0.15 per million input tokens and $0.60 per million output
+  tokens. They are estimates, not invoices.
+- **Steps** count trace rows (one per model request, including refused requests).
+  Across the 15 runs, 15 rows had no usage because the request was refused. The
+  frozen agent does not log each internal rate-limit wait as a separate row.
+- **pass^3** is the share of tasks that passed in all three repetitions. It is not
+  pass@3.
 
-## Scorer controls (no model)
+### Per task
 
-Verified on clean evaluation commit `3f2df171ed97dd8cbae4fd48b2de78d903ee9c7e`,
-Python 3.13.1, local backend:
+| Task | Feature | Passed | Batch | Notes |
+|---|---|---:|---|---|
+| T01 | `filter_by_priority` | 3/3 | `20261027T192036Z-a2cd78af` | |
+| T02 | `search` | 3/3 | `20261028T222638Z-7615e9d3` | Rerun of a discarded batch (see below) |
+| T03 | `delete` | 3/3 | `20261028T224535Z-63183b8d` | |
+| T04 | `summary` | 3/3 | `20261029T121733Z-d3d08b2b` | Rerun of a discarded batch (see below) |
+| T05 | `to_csv` | **0/3** | `20261030T143136Z-973a4f26` | All three submissions failed to import |
 
-| Control | Attempts | Passed | Median model calls | API cost |
-|---|---:|---:|---:|---:|
-| Reference patches | 15 | 15 | 0 | $0 |
-| Unchanged baseline (noop) | 5 | 0 | 0 | $0 |
+Raw `summary.json`, `result.json`, `trace.jsonl` and `submission.json` files for
+these batches are kept unchanged in `evals/week1/`.
 
-Evidence: [reference report](docs/scorer-reference-local.json) and
-[noop report](docs/scorer-noop-local.json). The reference control passes all
-three repetitions for all five tasks. These rows verify the scorer; they do
-not fill the real-agent row 0.
+### Why T05 failed
 
-## Pending joint checks
+All three T05 attempts wrote `lineterminator='\n'` inside a Python string that the
+agent passed to a heredoc. The `\n` became a real line break in `store.py`, which
+left an unterminated string literal. Pytest could not import `tasklib`, so the
+runner reported `error` (collection failure) rather than `failed_tests`. Both
+statuses count as unsuccessful attempts in the pass rate.
 
-- Validate all five tasks in the Python 3.12 Docker image.
-- Run the single agent 5 × 3 times and record its actual summary and Git commit.
-- Demonstrate at least two tasks solved at least once.
-- Search real traces for hidden-test filenames and annotate one solved and one
-  failed run. Historical prototype traces are not the new benchmark's row 0.
+This failure is partly caused by the working rules in `bench/prompt.py`, which show
+the agent a normal triple-quoted string for the appended method. That worked for
+T01 to T04 but not for the one task that needs escape sequences. The prompt is not
+changed for row 0: the baseline stays frozen so all 15 runs are comparable.
 
-See [the benchmark guide](bench/README.md) for exact commands and metric definitions.
+## Batches not counted
+
+| Batch | Task | Reason for exclusion |
+|---|---|---|
+| `20261027T200253Z-f2998abb` | T02 | Daily Groq token quota ran out during runs 2 and 3 (every wait was capped at 60 s). Rerun in full, not only the failed attempts. |
+| `20261029T095634Z-4d3fb0a2` | T04 | Grading of run 2 hit a host timeout of about 6 minutes. The submitted `summary()` passed all 8 hidden cases when checked separately, so the failure was in the grading environment. Rerun in full. |
+| `20261029T122721Z-30a4dd31` | T05 | Daily quota ran out; runs ended after about 2 steps. Rerun in full. |
+
+Earlier batches from 2026-10-27 were made while the prompt, retry and cost logging
+were still being fixed, from uncommitted or older code. They are debugging runs and
+are not part of row 0.
+
+## Checks
+
+| Check | Result | Evidence |
+|---|---|---|
+| Task validator, Python 3.12 Docker image | 5/5 tasks valid | [report](docs/benchmark-validation-docker.json) |
+| Task validator, local Python 3.13.1 | 5/5 tasks valid | [report](docs/benchmark-validation-local.json) |
+| Hidden test that already passes is rejected | Covered by a self-test (`test_trap_rejects_hidden_case_already_passing`) | `bench/tests/test_validator.py` |
+| Hidden-test file names in the 15 traces | 0 occurrences, 15 trace files, 79 JSON rows | `evals/week1/official-leak-check.json` |
+| Sandbox: no network, not root, read-only system, writes only in `/workspace` | All four checks held | [sandbox proof](docs/sandbox-proof.md) |
+| Scorer controls, no model (reference patches 15/15, unchanged baseline 0/5) | Passed | [reference](docs/scorer-reference-local.json), [noop](docs/scorer-noop-local.json) |
+
+The scorer controls make no model calls and are not agent performance. The leak
+check is a text search; it does not by itself prove isolation of every file.
+
+## Still to do for Week 1
+
+- Annotate one solved and one failed official trace in `docs/annotated-traces.md`.
+  T05 is the natural failed trace.
+
+See [the benchmark guide](bench/README.md) for commands and metric definitions.

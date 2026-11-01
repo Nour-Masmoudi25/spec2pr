@@ -1,0 +1,24 @@
+{
+  "task_id": "T03",
+  "run_id": "T03-2",
+  "agent": "single",
+  "backend": "docker",
+  "base_commit": "dd0519be0d15a7b370dadb342319b982b2bfcaef",
+  "passed": true,
+  "status": "passed",
+  "steps": 6,
+  "cost_usd": null,
+  "agent_status": "api_error",
+  "tokens_in": null,
+  "tokens_out": null,
+  "known_cost_usd": 0.005189249999999999,
+  "api_error_calls": 1,
+  "fail_to_pass": {
+    "passed": 16,
+    "total": 16
+  },
+  "pass_to_pass": {
+    "passed": 127,
+    "total": 127
+  }
+}
