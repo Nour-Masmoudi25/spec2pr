@@ -1,0 +1,23 @@
+--- a/src/tasklib/store.py
++++ b/src/tasklib/store.py
+@@ -159,3 +159,20 @@
+             store._tasks[task.id] = task
+         store._next_id = counter
+         return store
++
++    def rename_many(self, updates: list[dict]) -> list[Task]:
++        """Validate every rename before applying the batch."""
++        if not isinstance(updates, list):
++            raise ValueError("Updates must be a list")
++        prepared, seen = [], set()
++        for update in updates:
++            record = validate_fields(update, {"id", "title"}, name="Rename")
++            task_id = validate_id(record["id"])
++            if task_id in seen:
++                raise ValueError("Duplicate task ID")
++            seen.add(task_id)
++            title = validate_title(record["title"])
++            prepared.append((self.get(task_id), title))
++        for task, title in prepared:
++            task.title = title
++        return [task for task, title in prepared]

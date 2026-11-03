@@ -1,5 +1,9 @@
 # Proposed Week 2 multi-agent experiment
 
+> Historical design. The concrete contracts and current integration proposal
+> are in [ARCHITECTURE.md](../ARCHITECTURE.md). B's checks are implemented;
+> A's live planner, hooks and team evidence are still pending integration.
+
 Status: design only. Implement after the Week 1 campaign and its evidence are
 complete. The Week 1 agent, prompt and evaluator remain frozen meanwhile.
 

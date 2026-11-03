@@ -76,9 +76,14 @@ are not part of row 0.
 The scorer controls make no model calls and are not agent performance. The leak
 check is a text search; it does not by itself prove isolation of every file.
 
-## Still to do for Week 1
+## Trace analysis
 
-- Annotate one solved and one failed official trace in `docs/annotated-traces.md`.
-  T05 is the natural failed trace.
+The [annotated official traces](docs/annotated-traces.md) explain T01-1 (solved)
+and T05-1 (syntax failure followed by an API limit), with exact JSONL line
+references. The original evidence is unchanged. Internal API retries are not
+logged individually in the frozen agent; the annotations document this limit.
+
+Week 2 benchmark and contract checks are recorded separately in
+[the Person B handoff](docs/person-b-weeks1-2.md); they are not new agent scores.
 
 See [the benchmark guide](bench/README.md) for commands and metric definitions.

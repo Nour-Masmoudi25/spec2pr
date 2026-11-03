@@ -1,4 +1,4 @@
-# Person B — five-task benchmark
+# Person B — ten-task benchmark
 
 | Task | Required method | Hidden cases |
 |---|---|---:|
@@ -7,26 +7,33 @@
 | T03 | delete(task_id) | 16 |
 | T04 | summary() | 8 |
 | T05 | to_csv() | 11 |
+| T06 | Task.copy(), TaskStore.clone() | 11 |
+| T07 | Task.priority_rank(), TaskStore.list_by_priority() | 10 |
+| T08 | dumps_store(store), loads_store(text) | 18 |
+| T09 | rename_many(updates) | 13 |
+| T10 | paginate(offset=0, limit=10) | 18 |
 
 Each directory contains a spec, hidden tests, a reference patch and task.json.
 The metadata records explicit FAIL_TO_PASS and PASS_TO_PASS IDs, acceptance
 mappings, a Git baseline and a normalized content fingerprint. Every task is
 independent and starts from `dd0519be0d15a7b370dadb342319b982b2bfcaef:target_repo`.
 The exported tree has 127 visible tests. It includes no Git history or benchmark
-answers. This baseline is fixed for reproducibility; Python 3.12 verification
-must still succeed before the team approves its final reference version.
+answers. This baseline is fixed for reproducibility. All ten tasks were checked
+under local Python 3.13.1 and Docker Python 3.12 on 2026-11-03; see
+`evals/week2/validation-local.json` and `evals/week2/validation-docker.json`.
+T06, T07 and T08 each require two source files in their reference fix.
 
 ## Validate the exercises
 
 From the repository root, with pytest installed:
 
 ```bash
-python bench/validate.py bench/tasks --report docs/benchmark-validation-local.json
-python bench/validate.py bench/tasks --backend docker --report docs/benchmark-validation-docker.json
+python bench/validate.py bench/tasks --report validation-local.json
+python bench/validate.py bench/tasks --backend docker --report validation-docker.json
 python -m pytest -q
 ```
 
-Expected: **5/5 tasks valid**. For each task, the validator exports the committed
+Expected: **10/10 tasks valid**. For each task, the validator exports the committed
 baseline, verifies its hash and checks all 127 visible tests pass. Every hidden
 test must fail during its test call; collection errors, fixture failures, skips
 and timeouts do not qualify. After applying the reference patch to a separate
@@ -43,6 +50,12 @@ skips, altered visible tests, and unsafe execution choices.
 ```bash
 python bench/run.py --agent single --tasks bench/tasks --n 3
 ```
+
+This now selects 30 attempts. The archived Week 1 result uses only T01–T05;
+`bench/aggregate.py` deliberately keeps that five-task definition. Do not mix
+the new tasks into row 0. Each task also provides a safe planner input
+`spec.json` with the full specification and numbered ACs. Its budget is a
+configurable proposed ceiling; these validation commands do not call a model.
 
 The runner checks Docker and API configuration before starting. Each attempt
 gets a fresh exported checkout and only its specification. After the agent

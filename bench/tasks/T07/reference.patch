@@ -1,0 +1,20 @@
+--- a/src/tasklib/models.py
++++ b/src/tasklib/models.py
+@@ -75,3 +75,7 @@
+             priority=record["priority"],
+             completed=record["completed"],
+         )
++
++    def priority_rank(self) -> int:
++        """Return the validated ordering weight."""
++        return ("low", "medium", "high").index(validate_priority(self.priority))
+--- a/src/tasklib/store.py
++++ b/src/tasklib/store.py
+@@ -159,3 +159,7 @@
+             store._tasks[task.id] = task
+         store._next_id = counter
+         return store
++
++    def list_by_priority(self) -> list[Task]:
++        """Return a stable descending priority view."""
++        return sorted(self._tasks.values(), key=lambda task: task.priority_rank(), reverse=True)
