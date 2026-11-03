@@ -1,0 +1,38 @@
+{
+  "spec_id": "T01",
+  "description": "# T01 — Filter tasks by priority\n\n## User story\n\nAs a library user, I want to retrieve tasks with a given priority\n\nso that I can focus on the relevant tasks.\n\n## Required interface\n\nAdd this method to TaskStore:\n\nfilter_by_priority(priority: str) -> list[Task]\n\n## Acceptance criteria\n\n- AC-1: Accept exactly \"low\", \"medium\", and \"high\".\n\n  Any other string must raise ValueError.\n\n- AC-2: Return only tasks whose priority matches the requested value.\n\n- AC-3: Preserve the matching tasks' creation order.\n\n- AC-4: Return an empty list if no tasks match,\n\n  including when the store is empty.\n\n- AC-5: Include both completed and incomplete matching tasks.\n\n- AC-6: Do not change stored tasks or their order.\n\n  Return a new list containing the matching Task objects.\n\n- AC-7: Existing public behavior must continue to work.\n\n## Allowed changes\n\nOnly files under src/tasklib/ may be modified.\n\nDo not modify tests or test configuration.\n",
+  "acs": [
+    {
+      "id": "AC-1",
+      "text": "Accept exactly \"low\", \"medium\", and \"high\". Any other string must raise ValueError."
+    },
+    {
+      "id": "AC-2",
+      "text": "Return only tasks whose priority matches the requested value."
+    },
+    {
+      "id": "AC-3",
+      "text": "Preserve the matching tasks' creation order."
+    },
+    {
+      "id": "AC-4",
+      "text": "Return an empty list if no tasks match, including when the store is empty."
+    },
+    {
+      "id": "AC-5",
+      "text": "Include both completed and incomplete matching tasks."
+    },
+    {
+      "id": "AC-6",
+      "text": "Do not change stored tasks or their order. Return a new list containing the matching Task objects."
+    },
+    {
+      "id": "AC-7",
+      "text": "Existing public behavior must continue to work."
+    }
+  ],
+  "allowed_paths": [
+    "src/tasklib/"
+  ],
+  "budget_usd": 1.0
+}

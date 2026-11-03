@@ -1,0 +1,31 @@
+--- a/src/tasklib/storage.py
++++ b/src/tasklib/storage.py
+@@ -146,3 +146,17 @@
+             parse_constant=_reject_constant,
+         )
+     return _decode_document(document)
++
++
++def dumps_store(store: TaskStore) -> str:
++    """Serialize validated data without opening files."""
++    if not isinstance(store, TaskStore):
++        raise ValueError("Store must be a TaskStore")
++    return json.dumps(store._snapshot(), ensure_ascii=False, indent=2, allow_nan=False)
++
++
++def loads_store(text: str) -> TaskStore:
++    """Decode a JSON string using the file format's strict validation."""
++    if not isinstance(text, str):
++        raise ValueError("JSON text must be a string")
++    return _decode_document(json.loads(text, object_pairs_hook=_unique_object, parse_constant=_reject_constant))
+--- a/src/tasklib/__init__.py
++++ b/src/tasklib/__init__.py
+@@ -32,6 +32,6 @@
+ 
+ from .models import Task
+ from .store import TaskStore
+-from .storage import load_store, save_store
++from .storage import load_store, save_store, dumps_store, loads_store
+ 
+-__all__ = ["Task", "TaskStore", "load_store", "save_store"]
++__all__ = ["dumps_store", "loads_store", "Task", "TaskStore", "load_store", "save_store"]

@@ -1,0 +1,30 @@
+{
+  "spec_id": "T02",
+  "description": "# T02 — Search task titles\n\n## Required interface\n\nAdd `TaskStore.search(query: str) -> list[Task]`.\n\n## Acceptance criteria\n\n- AC-1: Match a substring anywhere in the title, using Unicode str.casefold() on both title and query.\n- AC-2: An empty query matches all tasks; preserve query whitespace (do not strip it). Return [] for an empty store or no matches.\n- AC-3: Reject any non-string query with ValueError, including None, numbers, booleans, lists and dictionaries.\n- AC-4: Return a fresh list of the original Task objects in creation order, including completed tasks and duplicate titles.\n- AC-5: Do not mutate tasks, their order or ID allocation. Existing public behavior must keep working.\n\n## Allowed changes\n\nOnly files under `src/tasklib/` may change. Do not modify tests or test configuration. This task is independent of the other benchmark tasks.\n",
+  "acs": [
+    {
+      "id": "AC-1",
+      "text": "Match a substring anywhere in the title, using Unicode str.casefold() on both title and query."
+    },
+    {
+      "id": "AC-2",
+      "text": "An empty query matches all tasks; preserve query whitespace (do not strip it). Return [] for an empty store or no matches."
+    },
+    {
+      "id": "AC-3",
+      "text": "Reject any non-string query with ValueError, including None, numbers, booleans, lists and dictionaries."
+    },
+    {
+      "id": "AC-4",
+      "text": "Return a fresh list of the original Task objects in creation order, including completed tasks and duplicate titles."
+    },
+    {
+      "id": "AC-5",
+      "text": "Do not mutate tasks, their order or ID allocation. Existing public behavior must keep working."
+    }
+  ],
+  "allowed_paths": [
+    "src/tasklib/"
+  ],
+  "budget_usd": 1.0
+}

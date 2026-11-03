@@ -1,0 +1,12 @@
+--- a/src/tasklib/store.py
++++ b/src/tasklib/store.py
+@@ -159,3 +159,9 @@
+             store._tasks[task.id] = task
+         store._next_id = counter
+         return store
++
++    def paginate(self, offset: int = 0, limit: int = 10) -> list[Task]:
++        """Return a bounded creation-order view of live tasks."""
++        if type(offset) is not int or type(limit) is not int or offset < 0 or limit < 0:
++            raise ValueError("Offset and limit must be nonnegative integers")
++        return list(self._tasks.values())[offset:offset + limit]
