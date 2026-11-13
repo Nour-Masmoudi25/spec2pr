@@ -87,3 +87,33 @@ Week 2 benchmark and contract checks are recorded separately in
 [the Person B handoff](docs/person-b-weeks1-2.md); they are not new agent scores.
 
 See [the benchmark guide](bench/README.md) for commands and metric definitions.
+
+## Known limit: 8,000 tokens per minute
+
+On the Groq plan used here, `openai/gpt-oss-120b` accepts at most 8,000 tokens per
+minute. The conversation grows at every step (the prompt alone is about 4,600
+tokens), so a request that would exceed 8,000 tokens is refused with HTTP 413
+("Request too large"). Waiting does not help, because the request itself is too
+big, and the agent stops with `api_error`.
+
+| Measure over the 15 official runs | Count |
+|---|---:|
+| Runs with a request refused as too large | 8 |
+| of which still passed (code was already correct) | 6 |
+| of which failed (both are T05 runs) | 2 |
+| Runs that ended with `api_error` instead of the model finishing | 9 |
+
+Consequences for reading row 0:
+
+- The runner grades the code left on disk, so a run cut off after a correct edit
+  still counts as passed. The pass rate does not depend on the model finishing.
+- A task that needs several repair steps can run out of room before it succeeds.
+  The results therefore measure the agent together with this plan's limit, and the
+  limit probably lowers the pass rate on harder tasks.
+- Any later comparison between agents (for example a multi-agent pipeline, which
+  sends more tokens) must be run under the same limit or on a plan with a higher
+  one, or the comparison will not be fair.
+
+Possible mitigations, none applied to row 0: shorter tool output (currently up to
+4,000 characters per command), dropping old tool output from the conversation, or
+a plan or model with a higher per-minute limit.
