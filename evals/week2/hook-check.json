@@ -1,0 +1,241 @@
+{
+  "kind": "controlled_hook_probe",
+  "passed": 10,
+  "total": 10,
+  "hook_sha256": {
+    "PreToolUse": "e9cb82aa0445b469104474a48cf39b0adbabbdef73d3d83eadeb3b19139d799a",
+    "Stop": "8e16ea40f5235ae4d50d429370e4a1f752e8b3484745edfe4ca02a0c715460ad"
+  },
+  "results": [
+    {
+      "case": "deny_test_edit",
+      "event": "PreToolUse",
+      "expected": "block",
+      "input": {
+        "session_id": "controlled-hook-probe",
+        "cwd": "C:\\Users\\LENOVO\\AppData\\Local\\Temp\\spec2pr-hook-probe-n2y_81kv",
+        "transcript_path": "C:\\Users\\LENOVO\\AppData\\Local\\Temp\\spec2pr-hook-probe-n2y_81kv\\transcript.jsonl",
+        "permission_mode": "default",
+        "hook_event_name": "PreToolUse",
+        "agent_type": "implementer",
+        "tool_name": "Edit",
+        "tool_input": {
+          "file_path": "C:\\Users\\LENOVO\\AppData\\Local\\Temp\\spec2pr-hook-probe-n2y_81kv\\tests\\test_example.py",
+          "old_string": "assert False",
+          "new_string": "assert True"
+        },
+        "tool_use_id": "deny_test_edit"
+      },
+      "actual": "block",
+      "exit_code": 2,
+      "stdout": "",
+      "stderr": "Blocked: the implementer may only edit files under src/. Tests, hooks and contracts are read-only.\n",
+      "passed": true
+    },
+    {
+      "case": "deny_test_write",
+      "event": "PreToolUse",
+      "expected": "block",
+      "input": {
+        "session_id": "controlled-hook-probe",
+        "cwd": "C:\\Users\\LENOVO\\AppData\\Local\\Temp\\spec2pr-hook-probe-n2y_81kv",
+        "transcript_path": "C:\\Users\\LENOVO\\AppData\\Local\\Temp\\spec2pr-hook-probe-n2y_81kv\\transcript.jsonl",
+        "permission_mode": "default",
+        "hook_event_name": "PreToolUse",
+        "agent_type": "implementer",
+        "tool_name": "Write",
+        "tool_input": {
+          "file_path": "tests/test_example.py",
+          "content": "pass"
+        },
+        "tool_use_id": "deny_test_write"
+      },
+      "actual": "block",
+      "exit_code": 2,
+      "stdout": "",
+      "stderr": "Blocked: the implementer may only edit files under src/. Tests, hooks and contracts are read-only.\n",
+      "passed": true
+    },
+    {
+      "case": "deny_bash_test_write",
+      "event": "PreToolUse",
+      "expected": "block",
+      "input": {
+        "session_id": "controlled-hook-probe",
+        "cwd": "C:\\Users\\LENOVO\\AppData\\Local\\Temp\\spec2pr-hook-probe-n2y_81kv",
+        "transcript_path": "C:\\Users\\LENOVO\\AppData\\Local\\Temp\\spec2pr-hook-probe-n2y_81kv\\transcript.jsonl",
+        "permission_mode": "default",
+        "hook_event_name": "PreToolUse",
+        "agent_type": "implementer",
+        "tool_name": "Bash",
+        "tool_input": {
+          "command": "printf 'pass' > tests/test_example.py"
+        },
+        "tool_use_id": "deny_bash_test_write"
+      },
+      "actual": "block",
+      "exit_code": 2,
+      "stdout": "",
+      "stderr": "Blocked: this command writes to tests, hooks, contracts or pipeline files. Only src/ may change.\n",
+      "passed": true
+    },
+    {
+      "case": "deny_push",
+      "event": "PreToolUse",
+      "expected": "block",
+      "input": {
+        "session_id": "controlled-hook-probe",
+        "cwd": "C:\\Users\\LENOVO\\AppData\\Local\\Temp\\spec2pr-hook-probe-n2y_81kv",
+        "transcript_path": "C:\\Users\\LENOVO\\AppData\\Local\\Temp\\spec2pr-hook-probe-n2y_81kv\\transcript.jsonl",
+        "permission_mode": "default",
+        "hook_event_name": "PreToolUse",
+        "agent_type": "implementer",
+        "tool_name": "Bash",
+        "tool_input": {
+          "command": "git push origin main"
+        },
+        "tool_use_id": "deny_push"
+      },
+      "actual": "block",
+      "exit_code": 2,
+      "stdout": "",
+      "stderr": "Blocked: git push is not allowed for the implementer.\n",
+      "passed": true
+    },
+    {
+      "case": "deny_push_with_flag",
+      "event": "PreToolUse",
+      "expected": "block",
+      "input": {
+        "session_id": "controlled-hook-probe",
+        "cwd": "C:\\Users\\LENOVO\\AppData\\Local\\Temp\\spec2pr-hook-probe-n2y_81kv",
+        "transcript_path": "C:\\Users\\LENOVO\\AppData\\Local\\Temp\\spec2pr-hook-probe-n2y_81kv\\transcript.jsonl",
+        "permission_mode": "default",
+        "hook_event_name": "PreToolUse",
+        "agent_type": "implementer",
+        "tool_name": "Bash",
+        "tool_input": {
+          "command": "git -C . push origin main"
+        },
+        "tool_use_id": "deny_push_with_flag"
+      },
+      "actual": "block",
+      "exit_code": 2,
+      "stdout": "",
+      "stderr": "Blocked: git push is not allowed for the implementer.\n",
+      "passed": true
+    },
+    {
+      "case": "allow_source_edit",
+      "event": "PreToolUse",
+      "expected": "continue",
+      "input": {
+        "session_id": "controlled-hook-probe",
+        "cwd": "C:\\Users\\LENOVO\\AppData\\Local\\Temp\\spec2pr-hook-probe-n2y_81kv",
+        "transcript_path": "C:\\Users\\LENOVO\\AppData\\Local\\Temp\\spec2pr-hook-probe-n2y_81kv\\transcript.jsonl",
+        "permission_mode": "default",
+        "hook_event_name": "PreToolUse",
+        "agent_type": "implementer",
+        "tool_name": "Edit",
+        "tool_input": {
+          "file_path": "C:\\Users\\LENOVO\\AppData\\Local\\Temp\\spec2pr-hook-probe-n2y_81kv\\src\\tasklib\\store.py",
+          "old_string": "pass",
+          "new_string": "return []"
+        },
+        "tool_use_id": "allow_source_edit"
+      },
+      "actual": "continue",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "case": "allow_test_read",
+      "event": "PreToolUse",
+      "expected": "continue",
+      "input": {
+        "session_id": "controlled-hook-probe",
+        "cwd": "C:\\Users\\LENOVO\\AppData\\Local\\Temp\\spec2pr-hook-probe-n2y_81kv",
+        "transcript_path": "C:\\Users\\LENOVO\\AppData\\Local\\Temp\\spec2pr-hook-probe-n2y_81kv\\transcript.jsonl",
+        "permission_mode": "default",
+        "hook_event_name": "PreToolUse",
+        "agent_type": "implementer",
+        "tool_name": "Read",
+        "tool_input": {
+          "file_path": "tests/test_example.py"
+        },
+        "tool_use_id": "allow_test_read"
+      },
+      "actual": "continue",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "case": "allow_test_run",
+      "event": "PreToolUse",
+      "expected": "continue",
+      "input": {
+        "session_id": "controlled-hook-probe",
+        "cwd": "C:\\Users\\LENOVO\\AppData\\Local\\Temp\\spec2pr-hook-probe-n2y_81kv",
+        "transcript_path": "C:\\Users\\LENOVO\\AppData\\Local\\Temp\\spec2pr-hook-probe-n2y_81kv\\transcript.jsonl",
+        "permission_mode": "default",
+        "hook_event_name": "PreToolUse",
+        "agent_type": "implementer",
+        "tool_name": "Bash",
+        "tool_input": {
+          "command": "python -m pytest -q"
+        },
+        "tool_use_id": "allow_test_run"
+      },
+      "actual": "continue",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "case": "deny_stop_failed_tests",
+      "event": "Stop",
+      "expected": "block",
+      "input": {
+        "session_id": "controlled-hook-probe",
+        "cwd": "C:\\Users\\LENOVO\\AppData\\Local\\Temp\\spec2pr-hook-probe-n2y_81kv",
+        "transcript_path": "C:\\Users\\LENOVO\\AppData\\Local\\Temp\\spec2pr-hook-probe-n2y_81kv\\transcript.jsonl",
+        "permission_mode": "default",
+        "hook_event_name": "Stop",
+        "agent_type": "implementer",
+        "stop_hook_active": false,
+        "last_assistant_message": "Done"
+      },
+      "actual": "block",
+      "exit_code": 0,
+      "stdout": "{\"decision\": \"block\", \"reason\": \"Visible tests are failing (1 failed, exit code 1). Fix src/ and run: python hooks/run_visible_tests.py\"}\n",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "case": "allow_stop_passed_tests",
+      "event": "Stop",
+      "expected": "continue",
+      "input": {
+        "session_id": "controlled-hook-probe",
+        "cwd": "C:\\Users\\LENOVO\\AppData\\Local\\Temp\\spec2pr-hook-probe-n2y_81kv",
+        "transcript_path": "C:\\Users\\LENOVO\\AppData\\Local\\Temp\\spec2pr-hook-probe-n2y_81kv\\transcript.jsonl",
+        "permission_mode": "default",
+        "hook_event_name": "Stop",
+        "agent_type": "implementer",
+        "stop_hook_active": false,
+        "last_assistant_message": "Done"
+      },
+      "actual": "continue",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    }
+  ],
+  "limitation": "Synthetic events; live hook registration and team transcripts still required."
+}
