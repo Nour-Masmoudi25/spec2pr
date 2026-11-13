@@ -1,0 +1,26 @@
+{
+  "spec_id": "T04",
+  "description": "# T04 — Summarize task counts\n\n## Required interface\n\nAdd `TaskStore.summary() -> dict[str, int]`.\n\n## Acceptance criteria\n\n- AC-1: Return a dictionary with exactly total, completed and pending keys, containing integer counts. Empty stores return three zeros.\n- AC-2: Count each task once regardless of title or priority; pending means completed is False, and total equals completed plus pending.\n- AC-3: Reflect the current task state on every call, including completion, repeated completion, reopening and newly added tasks.\n- AC-4: Return a new dictionary on every call. Editing it must not change the store; summary must not mutate tasks, order or ID allocation. Existing behavior must keep working.\n\n## Allowed changes\n\nOnly files under `src/tasklib/` may change. Do not modify tests or test configuration. This task is independent of the other benchmark tasks.\n",
+  "acs": [
+    {
+      "id": "AC-1",
+      "text": "Return a dictionary with exactly total, completed and pending keys, containing integer counts. Empty stores return three zeros."
+    },
+    {
+      "id": "AC-2",
+      "text": "Count each task once regardless of title or priority; pending means completed is False, and total equals completed plus pending."
+    },
+    {
+      "id": "AC-3",
+      "text": "Reflect the current task state on every call, including completion, repeated completion, reopening and newly added tasks."
+    },
+    {
+      "id": "AC-4",
+      "text": "Return a new dictionary on every call. Editing it must not change the store; summary must not mutate tasks, order or ID allocation. Existing behavior must keep working."
+    }
+  ],
+  "allowed_paths": [
+    "src/tasklib/"
+  ],
+  "budget_usd": 1.0
+}

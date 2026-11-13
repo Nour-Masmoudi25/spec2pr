@@ -1,0 +1,22 @@
+{
+  "spec_id": "T09",
+  "description": "# T09 — Atomic batch rename\n\n## Acceptance criteria\n\n- AC-1: TaskStore.rename_many(updates) accepts a list of dictionaries with exactly id and title. Validate every entry before changing any task. Titles follow existing trimming and validation rules; IDs follow existing validation rules. Duplicate IDs, missing/unexpected fields and invalid inputs raise ValueError; a valid absent ID raises KeyError.\n- AC-2: Return the renamed stored Task objects in request order; empty input returns []. Keep creation order, priorities, completion flags and next-ID counter unchanged. Invalid batches leave all existing tasks and the counter unchanged.\n- AC-3: Existing public behavior must continue to work.\n\n## Allowed changes\n\nOnly src/tasklib/. Do not modify tests or test configuration.\n",
+  "acs": [
+    {
+      "id": "AC-1",
+      "text": "TaskStore.rename_many(updates) accepts a list of dictionaries with exactly id and title. Validate every entry before changing any task. Titles follow existing trimming and validation rules; IDs follow existing validation rules. Duplicate IDs, missing/unexpected fields and invalid inputs raise ValueError; a valid absent ID raises KeyError."
+    },
+    {
+      "id": "AC-2",
+      "text": "Return the renamed stored Task objects in request order; empty input returns []. Keep creation order, priorities, completion flags and next-ID counter unchanged. Invalid batches leave all existing tasks and the counter unchanged."
+    },
+    {
+      "id": "AC-3",
+      "text": "Existing public behavior must continue to work."
+    }
+  ],
+  "allowed_paths": [
+    "src/tasklib/"
+  ],
+  "budget_usd": 1.0
+}

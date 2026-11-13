@@ -1,0 +1,21 @@
+--- a/src/tasklib/models.py
++++ b/src/tasklib/models.py
+@@ -75,3 +75,7 @@
+             priority=record["priority"],
+             completed=record["completed"],
+         )
++
++    def copy(self) -> "Task":
++        """Return an independent validated task."""
++        return type(self).from_dict(self.to_dict())
+--- a/src/tasklib/store.py
++++ b/src/tasklib/store.py
+@@ -159,3 +159,8 @@
+             store._tasks[task.id] = task
+         store._next_id = counter
+         return store
++
++    def clone(self) -> "TaskStore":
++        """Validate the snapshot and preserve the next ID."""
++        document = self._snapshot()
++        return type(self)._restore([task.copy() for task in self._tasks.values()], document["next_id"])

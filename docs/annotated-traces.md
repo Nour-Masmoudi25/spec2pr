@@ -1,82 +1,81 @@
 # Week 1 annotated model traces
 
-Status: template only. Fill this document after selecting and checking the real
-evidence. No reference/noop control or synthetic test fixture is an agent run.
-Keep the original trace.jsonl, result.json and summary.json unchanged.
+Inspected on 2026-11-03 from the official evidence committed by Nour. Both
+examples belong to row 0; neither is a reference control or a synthetic fixture.
+The original traces, submissions, results and summaries remain unchanged.
 
-## Evidence selection
+All 15 official attempts record evaluation commit
+`834104fcf4b11b687a336b0e633daa1b6948be83`, a clean working tree, and target baseline
+`dd0519be0d15a7b370dadb342319b982b2bfcaef`. Reaggregating the five summaries gives
+12/15 successes, median known cost **$0.004149 (lower bound)** and median **6 logged
+steps**. The full median billed cost is unknown. A fresh scan of `evals/week1`
+found **0 hidden-test filename occurrences in 15 traces / 79 JSON rows**, matching
+[the published check](../evals/week1/official-leak-check.json).
 
-- The handoff dated 27 October reports T01 at 3/3 in
-  `runs/benchmarks/20261027T192036Z-a2cd78af`. Those files are not tracked in this
-  checkout; obtain the original batch before filling in the successful example.
-- The same handoff excludes the entire T02 batch
-  `runs/benchmarks/20261027T200253Z-f2998abb` because quota exhaustion interrupted
-  its execution. Do not count only its successful attempt in the official row.
-- Prefer a failed attempt from a completed official batch for the failure
-  example. If every official attempt passes, a historical debugging trace may
-  illustrate failure, but label it separately and exclude it from row 0.
-- The suggested historical directory `docs/evidence-T02-before-timeout-fix` is
-  also absent here. Do not invent its contents or its commit.
+## Successful example: T01-1
 
-## Successful trace
+Evidence: [trace](../evals/week1/20261027T192036Z-a2cd78af/T01-1/trace.jsonl),
+[result](../evals/week1/20261027T192036Z-a2cd78af/T01-1/result.json),
+[submission](../evals/week1/20261027T192036Z-a2cd78af/T01-1/submission.json),
+[batch](../evals/week1/20261027T192036Z-a2cd78af/summary.json).
 
-Evidence status: **not yet inspected**.
+Task: add `TaskStore.filter_by_priority(priority)`. It must validate the priority,
+preserve creation order and object identity, include completed tasks, and leave
+existing behavior intact. See [T01](../bench/tasks/T01/spec.md).
 
-| Item | Fill from the original evidence |
-|---|---|
-| Task and acceptance criteria | TODO |
-| Batch directory / run ID | TODO |
-| summary.json / result.json / trace.jsonl | TODO |
-| evaluation_commit / base_commit | TODO |
-| working_tree_dirty | Must be false for an official batch |
-| Official result or historical example | TODO |
-| Hidden / visible tests passed | TODO; read result.json |
-| Logged steps / known cost lower bound / unknown-usage rows | TODO |
-| Leak-check evidence | TODO; include the selected directory and check result |
-
-| Trace line(s) | Observed action and tool exit code | Interpretation supported by the evidence |
+| JSONL line | Observed action | Interpretation |
 |---|---|---|
-| TODO | How the model receives or inspects the target code | Explain which requirements it addresses |
-| TODO | The command that changes source code | Explain the implementation choice |
-| TODO | Visible test execution and output | Distinguish visible tests from later hidden grading |
-| TODO | Final response or step-limit exit | Compare the model's claim with result.json |
+| 1 | A Python heredoc appends the method to `src/tasklib/store.py`; exit 0. It calls `validate_priority` and filters `self._tasks.values()` into a list. | Reuses the existing validation and ordered storage. No new task copies or status filter are introduced. |
+| 2 | `python -m pytest -q`; exit 0, `127 passed in 0.42s`. | The visible regression suite passes. The model has not run hidden acceptance tests. |
+| 3 | Final answer, no tool call; says the method is implemented and tests pass. | The agent stops itself. Its statement alone is not the grade. |
 
-Write a short explanation of why the submitted code passed, citing exact trace
-line numbers. A final message saying "done" does not prove the hidden tests pass.
-Mention unknown billed usage rather than replacing it with zero.
+The separate evaluator result confirms **16/16 hidden cases and 127/127 visible
+cases passed**. The original store iteration explains ordering and inclusion;
+the list comprehension explains the fresh list containing original objects.
+These observations agree with the acceptance tests and the final submitted code.
 
-## Failed trace
+Metrics: 3 logged steps; 14,336 input tokens; 714 output tokens; configured cost
+$0.0025788; zero unknown-usage rows; `agent_status=stopped_by_model`.
+Lines 2 and 3 record rate-limit waits of 7 and 31 seconds respectively.
 
-Evidence status: **not yet inspected**.
+## Failed example: T05-1
 
-| Item | Fill from the original evidence |
-|---|---|
-| Task / batch / run ID | TODO |
-| summary.json / result.json / trace.jsonl | TODO |
-| evaluation_commit / base_commit | TODO |
-| Official attempt or excluded debugging example | TODO; explain any exclusion |
-| Failure category | Wrong implementation, API rejection, quota, timeout or evaluator error |
-| Hidden / visible results and agent_status | TODO |
-| Logged steps / known cost lower bound / unknown-usage rows | TODO |
-| Leak-check evidence | TODO |
+Evidence: [trace](../evals/week1/20261030T143136Z-973a4f26/T05-1/trace.jsonl),
+[result](../evals/week1/20261030T143136Z-973a4f26/T05-1/result.json),
+[submission](../evals/week1/20261030T143136Z-973a4f26/T05-1/submission.json),
+[batch](../evals/week1/20261030T143136Z-973a4f26/summary.json).
 
-| Trace line(s) | Observed event | Consequence and supported explanation |
+Task: implement `TaskStore.to_csv()` with the required columns, quoting, booleans
+and line endings. See [T05](../bench/tasks/T05/spec.md).
+
+| JSONL line | Observed action | Consequence |
 |---|---|---|
-| TODO | First sign of the failure | State what the trace actually shows |
-| TODO | Attempted repair or API error | Distinguish model behavior from infrastructure |
-| TODO | Final status and evaluator result | Explain why the attempt was not successful |
+| 1 | Appends `to_csv` using a normal triple-quoted Python string in a heredoc; tool exits 0. | Writing the file succeeds, but the embedded `\n` in `lineterminator` becomes a literal newline inside a single-quoted string in the generated source. |
+| 2 | `python -m pytest -q`; exit 2. | Test collection fails with `SyntaxError: unterminated string literal`, `store.py:184`. A successful write did not establish valid Python. |
+| 3 | `sed -n '150,210p' src/tasklib/store.py`; exit 0. | The output visibly shows the split `lineterminator` string. This is direct evidence of the generated syntax defect. |
+| 4 | Repeats pytest; exit 2 with the same syntax error. | No repair appears between inspecting the source and rerunning tests. |
+| 5 | No tool executes. API returns HTTP 413: request 8,478 tokens exceeds the 8,000 TPM limit. | The attempt ends with `agent_status=api_error`; usage/cost for this row is unknown. |
 
-Conclude with one evidence-based lesson and a possible later experiment. Do not
-modify the frozen agent to apply that experiment until the official campaign is
-complete. An exhausted-quota run in which no code was written is not evidence
-that the model could not implement the feature.
+Final grading also fails during collection. Its status is **`error`**, not a
+normal assertion failure; hidden and visible pass counts are unavailable.
+This unsuccessful attempt still belongs in the official 15-run denominator.
+It combines a generated-code defect and a later API limit; the evidence does
+not establish what the model would have done if another call were possible.
 
-## Measurement limits in the frozen runner
+Metrics: 5 logged steps; known cost lower bound $0.0040698; 1 unknown-usage row;
+total cost and total tokens are unknown. The other two official T05 attempts
+also failed, as recorded in the batch summary; they were not replaced with
+successful reruns or controls.
 
-`steps` counts trace rows. `api_error_calls` counts rows whose cost is unknown;
-it is not a complete count of HTTP requests or exclusively malformed tool calls.
-The rate-limit retry loop can make several HTTP attempts inside one logged step.
-Its intermediate retries are not separate trace records. A successful recovery
-can record `rate_limit_wait_s`; a failed retry sequence does not preserve every
-intermediate wait. Do not reconstruct missing events or claim a one-to-one
-relationship between trace lines and all API requests from these files alone.
+Lesson: verify generated Python before claiming completion. A later experiment
+can compare safe source-writing instructions and a syntax check, while keeping
+the task, model and budget fixed. No such improvement is applied retroactively
+to the frozen Week 1 prompt or results.
+
+## Measurement limits
+
+`steps` counts trace rows. `api_error_calls` counts rows with unknown cost; it is
+not a complete count of HTTP requests. Internal rate-limit retries are not
+logged individually, so these traces do **not** prove one line per physical API
+request. A successful recovery may record `rate_limit_wait_s`. The filename
+scan checks textual leakage and cannot alone prove sandbox isolation.

@@ -1,0 +1,22 @@
+{
+  "spec_id": "T10",
+  "description": "# T10 — Pagination in creation order\n\n## Acceptance criteria\n\n- AC-1: TaskStore.paginate(offset=0, limit=10) returns a fresh list of live stored Task objects in creation order, including completed tasks. Return at most limit tasks starting at offset; zero limit or an offset beyond the end returns [].\n- AC-2: Both arguments must be nonnegative integers excluding bool. Invalid arguments raise ValueError. No call changes tasks, creation order or the next-ID counter.\n- AC-3: Existing public behavior must continue to work.\n\n## Allowed changes\n\nOnly src/tasklib/. Do not modify tests or test configuration.\n",
+  "acs": [
+    {
+      "id": "AC-1",
+      "text": "TaskStore.paginate(offset=0, limit=10) returns a fresh list of live stored Task objects in creation order, including completed tasks. Return at most limit tasks starting at offset; zero limit or an offset beyond the end returns []."
+    },
+    {
+      "id": "AC-2",
+      "text": "Both arguments must be nonnegative integers excluding bool. Invalid arguments raise ValueError. No call changes tasks, creation order or the next-ID counter."
+    },
+    {
+      "id": "AC-3",
+      "text": "Existing public behavior must continue to work."
+    }
+  ],
+  "allowed_paths": [
+    "src/tasklib/"
+  ],
+  "budget_usd": 1.0
+}

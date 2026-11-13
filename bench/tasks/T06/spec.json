@@ -1,0 +1,26 @@
+{
+  "spec_id": "T06",
+  "description": "# T06 — Independent task and store copies\n\n## Acceptance criteria\n\n- AC-1: Task.copy() returns a new Task with the same four validated values; changing the copy cannot change the original.\n- AC-2: TaskStore.clone() returns an independent TaskStore preserving IDs, creation order, all values and the next-ID counter, including gaps and an empty store.\n- AC-3: copy and clone reject invalid directly mutated task values with ValueError and leave the original untouched.\n- AC-4: Existing public behavior must continue to work.\n\n## Allowed changes\n\nOnly src/tasklib/. Do not modify tests or test configuration.\n",
+  "acs": [
+    {
+      "id": "AC-1",
+      "text": "Task.copy() returns a new Task with the same four validated values; changing the copy cannot change the original."
+    },
+    {
+      "id": "AC-2",
+      "text": "TaskStore.clone() returns an independent TaskStore preserving IDs, creation order, all values and the next-ID counter, including gaps and an empty store."
+    },
+    {
+      "id": "AC-3",
+      "text": "copy and clone reject invalid directly mutated task values with ValueError and leave the original untouched."
+    },
+    {
+      "id": "AC-4",
+      "text": "Existing public behavior must continue to work."
+    }
+  ],
+  "allowed_paths": [
+    "src/tasklib/"
+  ],
+  "budget_usd": 1.0
+}

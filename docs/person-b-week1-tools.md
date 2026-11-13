@@ -1,5 +1,11 @@
 # Partie B après le compte rendu du 27 octobre
 
+> Mise à jour du 3 novembre : ce document décrit la passation historique.
+> Les PR #1 et #2 sont fusionnées ; Nour a publié les 15 essais dans
+> `evals/week1` et Docker fonctionne sur ce poste. Les annotations sont
+> terminées. Pour l'état actuel et les commandes des dix exercices, lire
+> [la passation semaines 1–2](person-b-weeks1-2.md).
+
 Le travail B consiste à préparer la clôture de la semaine 1 pendant que Nour
 termine les essais officiels. Les nouveaux outils sont indépendants du moteur
 de l'agent : ils lisent des fichiers existants et ne consomment aucun crédit API.
