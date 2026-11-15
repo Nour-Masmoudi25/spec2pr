@@ -1,0 +1,46 @@
+{
+  "task": "T05",
+  "commit": "f45c9527b1acb250173bf6f8f7e61c73dad252db",
+  "working_tree_dirty": true,
+  "status": "passed",
+  "workspace": "C:\\Users\\LENOVO\\spec2pr-workspaces\\T05-20261115T192116",
+  "budget_usd": 1.0,
+  "observations": [
+    "Task T05-1: the implementation report does not match the real diff. claimed={'src/tasklib/store.py': (18, 0)} actual={'src/tasklib/store.py': (19, 0)}"
+  ],
+  "visible_baseline": {
+    "exit_code": 0,
+    "passed": 127,
+    "failed": 0
+  },
+  "hook_selftest": {
+    "file_written": false,
+    "refusal_seen": true
+  },
+  "visible_after_tester": {
+    "exit_code": 1,
+    "passed": 127,
+    "failed": 11
+  },
+  "visible_after_implementer": {
+    "exit_code": 0,
+    "passed": 138,
+    "failed": 0
+  },
+  "f2p": {
+    "pass": 11,
+    "fail": 0
+  },
+  "p2p": {
+    "pass": 127,
+    "fail": 0
+  },
+  "review_verdict": "approve",
+  "costs_usd": {
+    "hook_selftest": 0.007865,
+    "tester": 0.080138,
+    "implementer": 0.041,
+    "reviewer": 0.034052
+  },
+  "total_cost_usd": 0.163055
+}

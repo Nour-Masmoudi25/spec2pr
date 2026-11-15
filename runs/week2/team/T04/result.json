@@ -1,0 +1,44 @@
+{
+  "task": "T04",
+  "commit": "f45c9527b1acb250173bf6f8f7e61c73dad252db",
+  "working_tree_dirty": true,
+  "status": "passed",
+  "workspace": "C:\\Users\\LENOVO\\spec2pr-workspaces\\T04-20261115T192007",
+  "budget_usd": 1.0,
+  "observations": [],
+  "visible_baseline": {
+    "exit_code": 0,
+    "passed": 127,
+    "failed": 0
+  },
+  "hook_selftest": {
+    "file_written": false,
+    "refusal_seen": true
+  },
+  "visible_after_tester": {
+    "exit_code": 1,
+    "passed": 128,
+    "failed": 6
+  },
+  "visible_after_implementer": {
+    "exit_code": 0,
+    "passed": 134,
+    "failed": 0
+  },
+  "f2p": {
+    "pass": 8,
+    "fail": 0
+  },
+  "p2p": {
+    "pass": 127,
+    "fail": 0
+  },
+  "review_verdict": "approve",
+  "costs_usd": {
+    "hook_selftest": 0.007797,
+    "tester": 0.071434,
+    "implementer": 0.036211,
+    "reviewer": 0.018991
+  },
+  "total_cost_usd": 0.134433
+}
