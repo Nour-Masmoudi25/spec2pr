@@ -1,8 +1,8 @@
 """PreToolUse guard for the implementer role.
 
-Allowed: edit files under src/. Blocked: any other edit, shell writes to
-protected folders, and git push. Exit code 2 with a message on stderr is the
-documented way to block a tool call. This is a handoff check, not an OS
+Allowed: edit files under src/ or target_repo/src/. Blocked: any other edit, shell
+writes to protected folders, and git push. Exit code 2 with a message on stderr is
+the documented way to block a tool call. This is a handoff check, not an OS
 security boundary: indirect shell writes are only partly covered.
 """
 import json
@@ -32,7 +32,7 @@ def inside_src(cwd, raw):
         relative = path.relative_to(base)
     except ValueError:
         return False
-    return relative.parts[:1] == ("src",)
+    return relative.parts[:1] == ("src",) or relative.parts[:2] == ("target_repo", "src")
 
 
 def deny(reason):
@@ -51,8 +51,8 @@ def main():
     if tool in FILE_TOOLS:
         raw = data.get("file_path") or data.get("notebook_path")
         if not raw or not inside_src(cwd, raw):
-            return deny("Blocked: the implementer may only edit files under src/. "
-                        "Tests, hooks and contracts are read-only.")
+            return deny("Blocked: the implementer may only edit files under src/ or "
+                        "target_repo/src/. Tests, hooks and contracts are read-only.")
         return 0
     if tool == "Bash":
         command = re.sub(r"\d*>&\d+|\d*>\s*/dev/null", "", str(data.get("command", "")))
@@ -60,7 +60,7 @@ def main():
             return deny("Blocked: git push is not allowed for the implementer.")
         if WRITE.search(command) and PROTECTED.search(command):
             return deny("Blocked: this command writes to tests, hooks, contracts or "
-                        "pipeline files. Only src/ may change.")
+                        "pipeline files. Only src/ and target_repo/src/ may change.")
     return 0
 
 

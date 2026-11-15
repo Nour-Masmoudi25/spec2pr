@@ -2,9 +2,10 @@
 
 Reads the visible-test report written by hooks/run_visible_tests.py. The agent
 may not stop while visible tests fail, or while the report is missing, empty or
-older than the last change in src/. After MAX_BLOCKS refusals the agent may stop,
-and .pipeline/stop-gave-up.txt records that, so the loop is bounded and visible.
-Only visible tests are used here. Hidden tests never reach this hook.
+older than the last change in src/ or target_repo/src/. After MAX_BLOCKS refusals
+the agent may stop, and .pipeline/stop-gave-up.txt records that, so the loop is
+bounded and visible. Only visible tests are used here. Hidden tests never reach
+this hook.
 """
 import json
 import sys
@@ -12,6 +13,13 @@ from pathlib import Path
 
 MAX_BLOCKS = 5
 RUN = "python hooks/run_visible_tests.py"
+
+
+def newest_source_time(cwd):
+    times = [f.stat().st_mtime
+             for root in (cwd / "src", cwd / "target_repo" / "src")
+             if root.is_dir() for f in root.rglob("*.py")]
+    return max(times, default=0)
 
 
 def problem(cwd, report_path):
@@ -24,8 +32,7 @@ def problem(cwd, report_path):
         failed = int(report["failed"])
     except (OSError, ValueError, KeyError, TypeError):
         return "The visible test report is unreadable. Run: " + RUN
-    newest = max((f.stat().st_mtime for f in (cwd / "src").rglob("*.py")), default=0)
-    if newest > report_path.stat().st_mtime:
+    if newest_source_time(cwd) > report_path.stat().st_mtime:
         return "The report is older than your last change in src/. Run: " + RUN
     if code != 0 or failed > 0:
         return "Visible tests are failing (%d failed, exit code %d). Fix src/ and run: %s" % (failed, code, RUN)

@@ -3,8 +3,8 @@
   "passed": 10,
   "total": 10,
   "hook_sha256": {
-    "PreToolUse": "e9cb82aa0445b469104474a48cf39b0adbabbdef73d3d83eadeb3b19139d799a",
-    "Stop": "8e16ea40f5235ae4d50d429370e4a1f752e8b3484745edfe4ca02a0c715460ad"
+    "PreToolUse": "52cbeed5ccd7013fb34e7eb3d32c685b42d39cf9ccf463587da213f572cb9446",
+    "Stop": "ba21c17ffbcfe21d979c4264466eaa5cb14a07553603c12b95908c823dc0699f"
   },
   "results": [
     {
@@ -13,14 +13,14 @@
       "expected": "block",
       "input": {
         "session_id": "controlled-hook-probe",
-        "cwd": "C:\\Users\\LENOVO\\AppData\\Local\\Temp\\spec2pr-hook-probe-n2y_81kv",
-        "transcript_path": "C:\\Users\\LENOVO\\AppData\\Local\\Temp\\spec2pr-hook-probe-n2y_81kv\\transcript.jsonl",
+        "cwd": "C:\\Users\\LENOVO\\AppData\\Local\\Temp\\spec2pr-hook-probe-w0r1me0r",
+        "transcript_path": "C:\\Users\\LENOVO\\AppData\\Local\\Temp\\spec2pr-hook-probe-w0r1me0r\\transcript.jsonl",
         "permission_mode": "default",
         "hook_event_name": "PreToolUse",
         "agent_type": "implementer",
         "tool_name": "Edit",
         "tool_input": {
-          "file_path": "C:\\Users\\LENOVO\\AppData\\Local\\Temp\\spec2pr-hook-probe-n2y_81kv\\tests\\test_example.py",
+          "file_path": "C:\\Users\\LENOVO\\AppData\\Local\\Temp\\spec2pr-hook-probe-w0r1me0r\\tests\\test_example.py",
           "old_string": "assert False",
           "new_string": "assert True"
         },
@@ -29,7 +29,7 @@
       "actual": "block",
       "exit_code": 2,
       "stdout": "",
-      "stderr": "Blocked: the implementer may only edit files under src/. Tests, hooks and contracts are read-only.\n",
+      "stderr": "Blocked: the implementer may only edit files under src/ or target_repo/src/. Tests, hooks and contracts are read-only.\n",
       "passed": true
     },
     {
@@ -38,8 +38,8 @@
       "expected": "block",
       "input": {
         "session_id": "controlled-hook-probe",
-        "cwd": "C:\\Users\\LENOVO\\AppData\\Local\\Temp\\spec2pr-hook-probe-n2y_81kv",
-        "transcript_path": "C:\\Users\\LENOVO\\AppData\\Local\\Temp\\spec2pr-hook-probe-n2y_81kv\\transcript.jsonl",
+        "cwd": "C:\\Users\\LENOVO\\AppData\\Local\\Temp\\spec2pr-hook-probe-w0r1me0r",
+        "transcript_path": "C:\\Users\\LENOVO\\AppData\\Local\\Temp\\spec2pr-hook-probe-w0r1me0r\\transcript.jsonl",
         "permission_mode": "default",
         "hook_event_name": "PreToolUse",
         "agent_type": "implementer",
@@ -53,7 +53,7 @@
       "actual": "block",
       "exit_code": 2,
       "stdout": "",
-      "stderr": "Blocked: the implementer may only edit files under src/. Tests, hooks and contracts are read-only.\n",
+      "stderr": "Blocked: the implementer may only edit files under src/ or target_repo/src/. Tests, hooks and contracts are read-only.\n",
       "passed": true
     },
     {
@@ -62,8 +62,8 @@
       "expected": "block",
       "input": {
         "session_id": "controlled-hook-probe",
-        "cwd": "C:\\Users\\LENOVO\\AppData\\Local\\Temp\\spec2pr-hook-probe-n2y_81kv",
-        "transcript_path": "C:\\Users\\LENOVO\\AppData\\Local\\Temp\\spec2pr-hook-probe-n2y_81kv\\transcript.jsonl",
+        "cwd": "C:\\Users\\LENOVO\\AppData\\Local\\Temp\\spec2pr-hook-probe-w0r1me0r",
+        "transcript_path": "C:\\Users\\LENOVO\\AppData\\Local\\Temp\\spec2pr-hook-probe-w0r1me0r\\transcript.jsonl",
         "permission_mode": "default",
         "hook_event_name": "PreToolUse",
         "agent_type": "implementer",
@@ -76,7 +76,7 @@
       "actual": "block",
       "exit_code": 2,
       "stdout": "",
-      "stderr": "Blocked: this command writes to tests, hooks, contracts or pipeline files. Only src/ may change.\n",
+      "stderr": "Blocked: this command writes to tests, hooks, contracts or pipeline files. Only src/ and target_repo/src/ may change.\n",
       "passed": true
     },
     {
@@ -85,8 +85,8 @@
       "expected": "block",
       "input": {
         "session_id": "controlled-hook-probe",
-        "cwd": "C:\\Users\\LENOVO\\AppData\\Local\\Temp\\spec2pr-hook-probe-n2y_81kv",
-        "transcript_path": "C:\\Users\\LENOVO\\AppData\\Local\\Temp\\spec2pr-hook-probe-n2y_81kv\\transcript.jsonl",
+        "cwd": "C:\\Users\\LENOVO\\AppData\\Local\\Temp\\spec2pr-hook-probe-w0r1me0r",
+        "transcript_path": "C:\\Users\\LENOVO\\AppData\\Local\\Temp\\spec2pr-hook-probe-w0r1me0r\\transcript.jsonl",
         "permission_mode": "default",
         "hook_event_name": "PreToolUse",
         "agent_type": "implementer",
@@ -108,8 +108,8 @@
       "expected": "block",
       "input": {
         "session_id": "controlled-hook-probe",
-        "cwd": "C:\\Users\\LENOVO\\AppData\\Local\\Temp\\spec2pr-hook-probe-n2y_81kv",
-        "transcript_path": "C:\\Users\\LENOVO\\AppData\\Local\\Temp\\spec2pr-hook-probe-n2y_81kv\\transcript.jsonl",
+        "cwd": "C:\\Users\\LENOVO\\AppData\\Local\\Temp\\spec2pr-hook-probe-w0r1me0r",
+        "transcript_path": "C:\\Users\\LENOVO\\AppData\\Local\\Temp\\spec2pr-hook-probe-w0r1me0r\\transcript.jsonl",
         "permission_mode": "default",
         "hook_event_name": "PreToolUse",
         "agent_type": "implementer",
@@ -131,14 +131,14 @@
       "expected": "continue",
       "input": {
         "session_id": "controlled-hook-probe",
-        "cwd": "C:\\Users\\LENOVO\\AppData\\Local\\Temp\\spec2pr-hook-probe-n2y_81kv",
-        "transcript_path": "C:\\Users\\LENOVO\\AppData\\Local\\Temp\\spec2pr-hook-probe-n2y_81kv\\transcript.jsonl",
+        "cwd": "C:\\Users\\LENOVO\\AppData\\Local\\Temp\\spec2pr-hook-probe-w0r1me0r",
+        "transcript_path": "C:\\Users\\LENOVO\\AppData\\Local\\Temp\\spec2pr-hook-probe-w0r1me0r\\transcript.jsonl",
         "permission_mode": "default",
         "hook_event_name": "PreToolUse",
         "agent_type": "implementer",
         "tool_name": "Edit",
         "tool_input": {
-          "file_path": "C:\\Users\\LENOVO\\AppData\\Local\\Temp\\spec2pr-hook-probe-n2y_81kv\\src\\tasklib\\store.py",
+          "file_path": "C:\\Users\\LENOVO\\AppData\\Local\\Temp\\spec2pr-hook-probe-w0r1me0r\\src\\tasklib\\store.py",
           "old_string": "pass",
           "new_string": "return []"
         },
@@ -156,8 +156,8 @@
       "expected": "continue",
       "input": {
         "session_id": "controlled-hook-probe",
-        "cwd": "C:\\Users\\LENOVO\\AppData\\Local\\Temp\\spec2pr-hook-probe-n2y_81kv",
-        "transcript_path": "C:\\Users\\LENOVO\\AppData\\Local\\Temp\\spec2pr-hook-probe-n2y_81kv\\transcript.jsonl",
+        "cwd": "C:\\Users\\LENOVO\\AppData\\Local\\Temp\\spec2pr-hook-probe-w0r1me0r",
+        "transcript_path": "C:\\Users\\LENOVO\\AppData\\Local\\Temp\\spec2pr-hook-probe-w0r1me0r\\transcript.jsonl",
         "permission_mode": "default",
         "hook_event_name": "PreToolUse",
         "agent_type": "implementer",
@@ -179,8 +179,8 @@
       "expected": "continue",
       "input": {
         "session_id": "controlled-hook-probe",
-        "cwd": "C:\\Users\\LENOVO\\AppData\\Local\\Temp\\spec2pr-hook-probe-n2y_81kv",
-        "transcript_path": "C:\\Users\\LENOVO\\AppData\\Local\\Temp\\spec2pr-hook-probe-n2y_81kv\\transcript.jsonl",
+        "cwd": "C:\\Users\\LENOVO\\AppData\\Local\\Temp\\spec2pr-hook-probe-w0r1me0r",
+        "transcript_path": "C:\\Users\\LENOVO\\AppData\\Local\\Temp\\spec2pr-hook-probe-w0r1me0r\\transcript.jsonl",
         "permission_mode": "default",
         "hook_event_name": "PreToolUse",
         "agent_type": "implementer",
@@ -202,8 +202,8 @@
       "expected": "block",
       "input": {
         "session_id": "controlled-hook-probe",
-        "cwd": "C:\\Users\\LENOVO\\AppData\\Local\\Temp\\spec2pr-hook-probe-n2y_81kv",
-        "transcript_path": "C:\\Users\\LENOVO\\AppData\\Local\\Temp\\spec2pr-hook-probe-n2y_81kv\\transcript.jsonl",
+        "cwd": "C:\\Users\\LENOVO\\AppData\\Local\\Temp\\spec2pr-hook-probe-w0r1me0r",
+        "transcript_path": "C:\\Users\\LENOVO\\AppData\\Local\\Temp\\spec2pr-hook-probe-w0r1me0r\\transcript.jsonl",
         "permission_mode": "default",
         "hook_event_name": "Stop",
         "agent_type": "implementer",
@@ -222,8 +222,8 @@
       "expected": "continue",
       "input": {
         "session_id": "controlled-hook-probe",
-        "cwd": "C:\\Users\\LENOVO\\AppData\\Local\\Temp\\spec2pr-hook-probe-n2y_81kv",
-        "transcript_path": "C:\\Users\\LENOVO\\AppData\\Local\\Temp\\spec2pr-hook-probe-n2y_81kv\\transcript.jsonl",
+        "cwd": "C:\\Users\\LENOVO\\AppData\\Local\\Temp\\spec2pr-hook-probe-w0r1me0r",
+        "transcript_path": "C:\\Users\\LENOVO\\AppData\\Local\\Temp\\spec2pr-hook-probe-w0r1me0r\\transcript.jsonl",
         "permission_mode": "default",
         "hook_event_name": "Stop",
         "agent_type": "implementer",
