@@ -117,3 +117,17 @@ Consequences for reading row 0:
 Possible mitigations, none applied to row 0: shorter tool output (currently up to
 4,000 characters per command), dropping old tool output from the conversation, or
 a plan or model with a higher per-minute limit.
+
+## Row 1: four-role team, Claude Code prototype (Week 2)
+
+| Row | Agent | Tasks x runs | Pass rate | Median cost per task (USD) | Total cost (USD) | Date | Commit |
+|---|---|---|---|---|---|---|---|
+| 1 | Team: planner, tester, implementer, reviewer (Claude Code, `sonnet` role files) | 5 x 1 | **5/5 (100%)** | 0.1612 | 0.7762 | 2026-11-15 | `43fa9beb586912d3b3d472749dc5287e3472a3f2` |
+
+This row is a working prototype and is **not comparable with row 0**: the team ran on
+a Claude model through Claude Code, row 0 on `openai/gpt-oss-120b` through Groq, and
+each task was run once. Cost is the `total_cost_usd` reported by Claude Code, not the
+configured Groq rates. The fair comparison needs a single agent on the same Claude
+model at the same budget (to do). The runs were made while `pipeline/run_team.py` and
+the role files were uncommitted (`working_tree_dirty: true` in each `result.json`) and
+committed unchanged in the commit above. Hand-off notes: [docs/team-handoff-notes.md](docs/team-handoff-notes.md).
