@@ -42,3 +42,88 @@ the agent makes no change. `git status` afterwards showed only the untracked
   independent evaluator remain necessary.
 - The model reported these results itself. The refusal text matches the messages in
   `hooks/pre_tool_guard.py`.
+## Part 2: the stop hook (live)
+
+Run on 2026-11-15, Claude Code 2.1.316. Setup, done by hand in a throwaway copy of
+the repo: one line in `target_repo/src/tasklib/store.py` was changed
+(`self._next_id += 1` became `+= 0`) and `python hooks/run_visible_tests.py` was run,
+giving 23 failed and 104 passed, exit code 1.
+
+### In a subagent: the refusal arrives, but the subagent still ends
+
+The implementer was started as a subagent and asked to break a test, run the tests
+and finish. Its transcript (`agent-a48f6610b1ca04c7b.jsonl`, 42 lines) ends at line
+42 with a `hook_blocking_error` from `SubagentStop` that carries our exact message.
+Nothing follows it: the subagent did not continue. One observation only. Claude
+Code delivered the block, but in this setup it did not keep the subagent working.
+Consequence: the pipeline must not rely on this hook alone. The orchestrator also
+checks the visible-test report when the implementer returns.
+
+### In a normal session (`claude --agent implementer`): the hook holds, with a limit
+
+The implementer was asked to reply "done" and do nothing else. Five times the stop
+hook refused with "Visible tests are failing (23 failed, exit code 1). Fix src/ and
+run: python hooks/run_visible_tests.py", and each time the agent kept working
+instead of ending. After the fifth refusal it was allowed to stop:
+
+| File | Content |
+|---|---|
+| `evals/week2/stop-blocks.txt` | `5` |
+| `evals/week2/stop-gave-up.txt` | Stopped after 5 refusals. Last problem: Visible tests are failing (23 failed, exit code 1). Fix src/ and run: python hooks/run_visible_tests.py |
+
+The loop is therefore bounded: at most 5 refusals, and the file records that the
+agent gave up with failing tests.
+
+### What this does not show
+
+- In this run the agent never fixed the code. Claude Code's auto-mode safety check
+  blocked `python hooks/run_visible_tests.py` twice, so the agent could not run the
+  tests, and it said so instead of guessing. A permission rule for that one command
+  was added in `.claude/settings.json`; whether it gets past the check has not been
+  tested yet.
+- A refusal followed by a fix and a clean stop was not observed. An earlier run in
+  which the agent fixed the line by itself, without any refusal, does not count.
+- The agent was given no spec or plan, only the test instruction above.
+
+## Part 2: the stop hook (live)
+
+Run on 2026-11-15, Claude Code 2.1.316. Setup, done by hand in a throwaway copy of
+the repo: one line in `target_repo/src/tasklib/store.py` was changed
+(`self._next_id += 1` became `+= 0`) and `python hooks/run_visible_tests.py` was run,
+giving 23 failed and 104 passed, exit code 1.
+
+### In a subagent: the refusal arrives, but the subagent still ends
+
+The implementer was started as a subagent and asked to break a test, run the tests
+and finish. Its transcript (`agent-a48f6610b1ca04c7b.jsonl`, 42 lines) ends at line
+42 with a `hook_blocking_error` from `SubagentStop` that carries our exact message.
+Nothing follows it: the subagent did not continue. One observation only. Claude
+Code delivered the block, but in this setup it did not keep the subagent working.
+Consequence: the pipeline must not rely on this hook alone. The orchestrator also
+checks the visible-test report when the implementer returns.
+
+### In a normal session (`claude --agent implementer`): the hook holds, with a limit
+
+The implementer was asked to reply "done" and do nothing else. Five times the stop
+hook refused with "Visible tests are failing (23 failed, exit code 1). Fix src/ and
+run: python hooks/run_visible_tests.py", and each time the agent kept working
+instead of ending. After the fifth refusal it was allowed to stop:
+
+| File | Content |
+|---|---|
+| `evals/week2/stop-blocks.txt` | `5` |
+| `evals/week2/stop-gave-up.txt` | Stopped after 5 refusals. Last problem: Visible tests are failing (23 failed, exit code 1). Fix src/ and run: python hooks/run_visible_tests.py |
+
+The loop is therefore bounded: at most 5 refusals, and the file records that the
+agent gave up with failing tests.
+
+### What this does not show
+
+- In this run the agent never fixed the code. Claude Code's auto-mode safety check
+  blocked `python hooks/run_visible_tests.py` twice, so the agent could not run the
+  tests, and it said so instead of guessing. A permission rule for that one command
+  was added in `.claude/settings.json`; whether it gets past the check has not been
+  tested yet.
+- A refusal followed by a fix and a clean stop was not observed. An earlier run in
+  which the agent fixed the line by itself, without any refusal, does not count.
+- The agent was given no spec or plan, only the test instruction above.

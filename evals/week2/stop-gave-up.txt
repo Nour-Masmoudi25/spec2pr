@@ -1,0 +1,1 @@
+Stopped after 5 refusals. Last problem: Visible tests are failing (23 failed, exit code 1). Fix src/ and run: python hooks/run_visible_tests.py
