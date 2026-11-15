@@ -1,0 +1,20 @@
+--- a/src/tasklib/store.py
++++ b/src/tasklib/store.py
+@@ -124,4 +124,17 @@
+         return pending
+ 
++    def summary(self) -> dict[str, int]:
++        """Return fresh total, completed and pending counts.
++
++        Counts are computed on each call; the store is never mutated.
++        """
++        total = len(self._tasks)
++        completed = sum(1 for task in self._tasks.values() if task.completed is True)
++        return {
++            "total": total,
++            "completed": completed,
++            "pending": total - completed,
++        }
++
+     def _snapshot(self) -> dict:
+         """Create a validated persistence document without mutating the store.

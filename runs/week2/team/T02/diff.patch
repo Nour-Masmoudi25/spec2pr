@@ -1,0 +1,20 @@
+--- a/src/tasklib/store.py
++++ b/src/tasklib/store.py
+@@ -54,4 +54,17 @@
+         """
+         return list(self._tasks.values())
++
++    def search(self, query: str) -> list[Task]:
++        """Return live tasks whose title contains query, casefolded.
++
++        The query is not stripped. An empty query matches every task.
++        Non-string queries raise ValueError. Nothing is mutated.
++        """
++        if not isinstance(query, str):
++            raise ValueError("Query must be a string")
++        needle = query.casefold()
++        return [
++            task for task in self._tasks.values() if needle in task.title.casefold()
++        ]
+ 
+     def complete(self, task_id: int) -> Task:

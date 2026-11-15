@@ -1,0 +1,15 @@
+--- a/src/tasklib/store.py
++++ b/src/tasklib/store.py
+@@ -97,4 +97,12 @@
+         return task
+ 
++    def delete(self, task_id: int) -> Task:
++        """Remove and return the task with the given ID.
++
++        Invalid IDs raise ValueError, absent IDs raise KeyError. The next-ID
++        counter is never changed, so deleted IDs are not reused.
++        """
++        return self._tasks.pop(validate_id(task_id))
++
+     def add_many(self, items: list[dict]) -> list[Task]:
+         """Append a batch atomically with respect to input validation.

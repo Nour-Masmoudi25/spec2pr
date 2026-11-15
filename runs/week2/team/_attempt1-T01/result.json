@@ -1,0 +1,25 @@
+{
+  "task": "T01",
+  "commit": "f45c9527b1acb250173bf6f8f7e61c73dad252db",
+  "working_tree_dirty": true,
+  "status": "stopped",
+  "workspace": "C:\\Users\\LENOVO\\spec2pr-workspaces\\T01-20261115T190555",
+  "budget_usd": 1.0,
+  "observations": [],
+  "visible_baseline": {
+    "exit_code": 0,
+    "passed": 127,
+    "failed": 0
+  },
+  "hook_selftest": {
+    "file_written": false,
+    "refusal_seen": false
+  },
+  "stopped_at": "tester",
+  "reason": "the reply is not valid JSON: Expecting value: line 1 column 1 (char 0)",
+  "costs_usd": {
+    "hook_selftest": 0.029394,
+    "tester": 0.106549
+  },
+  "total_cost_usd": 0.135943
+}
