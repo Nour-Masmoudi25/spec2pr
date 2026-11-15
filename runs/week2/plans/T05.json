@@ -1,0 +1,25 @@
+{
+  "spec_id": "T05",
+  "tasks": [
+    {
+      "id": "T05-1",
+      "files": [
+        "src/tasklib/store.py"
+      ],
+      "acs": [
+        "AC-1",
+        "AC-2",
+        "AC-3",
+        "AC-4"
+      ]
+    }
+  ],
+  "risks": [
+    "The csv module's default line terminator is \\r\\n. Use lineterminator='\\n' with QUOTE_MINIMAL and an io.StringIO buffer, otherwise AC-3 fails.",
+    "Titles may contain embedded newlines or carriage returns. The writer must not translate them, and the output must be returned as a string, not read through a file opened with newline translation.",
+    "Booleans must be written as lowercase true and false. Python's str(True) gives 'True', so the conversion has to be explicit.",
+    "Using Task.to_dict() revalidates fields and raises on corrupted tasks. Reading attributes directly avoids that, but also exports invalid values. Pick one approach and keep it free of side effects.",
+    "Tasks are live mutable references, so the export must iterate self._tasks.values() in insertion order. It must not touch _next_id, and it must use each task's current id attribute rather than the dict key.",
+    "Priority and title could be non-string values if an attribute was edited directly. The csv writer would then stringify them without any error."
+  ]
+}

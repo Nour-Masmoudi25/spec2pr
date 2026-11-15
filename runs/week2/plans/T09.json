@@ -1,0 +1,25 @@
+{
+  "spec_id": "T09",
+  "tasks": [
+    {
+      "id": "T09-1",
+      "files": [
+        "src/tasklib/store.py"
+      ],
+      "acs": [
+        "AC-1",
+        "AC-2",
+        "AC-3"
+      ]
+    }
+  ],
+  "risks": [
+    "Validation order matters. Every entry must be checked for shape, ID, title and duplicate IDs, and the batch must be checked for existence, before any title is assigned. Otherwise an invalid batch could leave a partial rename.",
+    "A batch can contain both an invalid entry and an absent ID. The spec doesn't say which error wins. The plan raises ValueError for all invalid input first, then KeyError for a valid but absent ID.",
+    "bool IDs such as True must raise ValueError and must not resolve to task 1. validate_id already handles this, so rename_many must not call get() on unvalidated input.",
+    "The input must be a list. A non-list, such as a dict or a string, must raise ValueError. An empty list must return [] without touching any state.",
+    "Duplicate detection must run on validated integer IDs, and it must run before any mutation.",
+    "Titles are stripped by validate_title. The stored title must be the stripped value, and the input dictionaries must not be modified.",
+    "Returned Task objects must be the live stored instances, in request order. Dictionary order, priority, completed flags and _next_id must not change. The method must not re-insert into _tasks."
+  ]
+}

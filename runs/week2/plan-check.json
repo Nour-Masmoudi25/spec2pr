@@ -1,0 +1,58 @@
+{
+  "kind": "saved_plan_validation",
+  "valid": 10,
+  "total": 10,
+  "results": [
+    {
+      "task_id": "T01",
+      "valid": true,
+      "uncovered_acs": []
+    },
+    {
+      "task_id": "T02",
+      "valid": true,
+      "uncovered_acs": []
+    },
+    {
+      "task_id": "T03",
+      "valid": true,
+      "uncovered_acs": []
+    },
+    {
+      "task_id": "T04",
+      "valid": true,
+      "uncovered_acs": []
+    },
+    {
+      "task_id": "T05",
+      "valid": true,
+      "uncovered_acs": []
+    },
+    {
+      "task_id": "T06",
+      "valid": true,
+      "uncovered_acs": []
+    },
+    {
+      "task_id": "T07",
+      "valid": true,
+      "uncovered_acs": []
+    },
+    {
+      "task_id": "T08",
+      "valid": true,
+      "uncovered_acs": []
+    },
+    {
+      "task_id": "T09",
+      "valid": true,
+      "uncovered_acs": []
+    },
+    {
+      "task_id": "T10",
+      "valid": true,
+      "uncovered_acs": []
+    }
+  ],
+  "limitation": "Valid structure and AC coverage do not prove model provenance or retry behavior."
+}

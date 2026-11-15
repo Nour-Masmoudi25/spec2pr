@@ -1,0 +1,27 @@
+{
+  "spec_id": "T02",
+  "tasks": [
+    {
+      "id": "T02-search",
+      "files": [
+        "src/tasklib/store.py"
+      ],
+      "acs": [
+        "AC-1",
+        "AC-2",
+        "AC-3",
+        "AC-4",
+        "AC-5"
+      ]
+    }
+  ],
+  "risks": [
+    "bool is a subclass of int and other non-str types must be rejected. An isinstance(query, str) check handles this, but str subclasses will also be accepted.",
+    "Titles are stripped at construction, but the query must not be stripped. A query with leading or trailing whitespace may therefore match nothing, and that is the intended behavior.",
+    "Task.title is mutable and can be reassigned to a non-string without validation. search could then fail on casefold. It should read titles without mutating or re-validating them.",
+    "The result must be a new list that holds the live Task references. It must not copy tasks or return a view of the dict values.",
+    "casefold is not the same as lower. For example, '\u00df' casefolds to 'ss'. Both the title and the query must be casefolded, not just one of them.",
+    "The empty-query check must happen after type validation, so that '' matches everything while None is rejected.",
+    "search must not touch _next_id or reorder _tasks."
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "spec_id": "T04",
+  "tasks": [
+    {
+      "id": "add-summary-method",
+      "files": [
+        "src/tasklib/store.py"
+      ],
+      "acs": [
+        "AC-1",
+        "AC-2",
+        "AC-3",
+        "AC-4"
+      ]
+    }
+  ],
+  "risks": [
+    "Task.completed is a live attribute that callers can edit directly. It might hold a non-bool truthy value. The summary should count with `task.completed is True` or `bool(...)` consistently, so that completed plus pending always equals total.",
+    "The summary must be computed on each call from `self._tasks`. Caching a count would go stale after complete, reopen, add, add_many or direct edits of a task.",
+    "The method must return a fresh dict each time and must not touch `_tasks` or `_next_id`. Both `_snapshot` and `_restore` depend on those two fields.",
+    "The values must be plain ints, not bools, and the dict must contain exactly the three keys total, completed and pending."
+  ]
+}

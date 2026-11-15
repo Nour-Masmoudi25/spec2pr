@@ -1,0 +1,36 @@
+{
+  "spec_id": "T08",
+  "tasks": [
+    {
+      "id": "storage-string-api",
+      "files": [
+        "src/tasklib/storage.py"
+      ],
+      "acs": [
+        "AC-1",
+        "AC-2",
+        "AC-3",
+        "AC-4"
+      ]
+    },
+    {
+      "id": "export-string-api",
+      "files": [
+        "src/tasklib/__init__.py"
+      ],
+      "acs": [
+        "AC-1",
+        "AC-4"
+      ]
+    }
+  ],
+  "risks": [
+    "load_store currently decodes from a file stream, so file loading and loads_store must share one parsing path (same hooks for duplicate keys and constants). If the two paths drift, the rules will differ.",
+    "loads_store must reject bytes, bytearray and other non-str input with ValueError. json.loads accepts bytes, so an explicit type check is needed and the error type must not be TypeError.",
+    "json.loads can raise RecursionError on deeply nested input, and JSONDecodeError subclasses ValueError. The nesting case must be handled so it does not leak a non-ValueError.",
+    "dumps_store has to validate through store._snapshot() before serializing, so tasks mutated directly are rejected. It must not touch the filesystem. Output must match save_store's version-1 format, with no trailing newline difference that breaks round trips.",
+    "save_store should reuse the same serialization helper so its output does not change. Files must still end with a newline and keep indent=2 and ensure_ascii=False.",
+    "json.dumps with allow_nan=False raises ValueError for NaN, but other serialization errors, such as a non-string key, could raise TypeError. Check that invalid values only ever produce ValueError.",
+    "Adding names to __init__.py means updating __all__ as well. The module docstring is optional."
+  ]
+}

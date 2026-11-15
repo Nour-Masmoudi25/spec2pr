@@ -1,0 +1,25 @@
+{
+  "spec_id": "T10",
+  "tasks": [
+    {
+      "id": "add-paginate",
+      "files": [
+        "src/tasklib/store.py"
+      ],
+      "acs": [
+        "AC-1",
+        "AC-2",
+        "AC-3"
+      ]
+    }
+  ],
+  "risks": [
+    "bool is a subclass of int, so isinstance(x, int) alone would accept True and False. These must be rejected explicitly.",
+    "Slicing with negative values would silently return wrong results, so negatives must raise ValueError before any slicing.",
+    "Both arguments must be validated before any work, even when the store is empty or limit is 0. For example, paginate(offset=-1, limit=0) must still raise.",
+    "The result must be a fresh list of the same live Task objects. Copying tasks would break the reference semantics that list_tasks and get have.",
+    "validate_id may not fit as a validator. It probably rejects 0 and uses ID-specific messages, and offset=0 and limit=0 are valid. A small local check in store.py is safer, and it avoids touching validation.py.",
+    "Default arguments (offset=0, limit=10) must be keyword-compatible. Positional calls must also work.",
+    "I did not read the other tasklib files (models.py, validation.py, __init__.py, storage.py) or any tests. The plan assumes paginate needs no change outside store.py."
+  ]
+}
