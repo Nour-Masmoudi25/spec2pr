@@ -1,0 +1,34 @@
+{
+  "spec_id": "T06",
+  "tasks": [
+    {
+      "id": "task-copy",
+      "files": [
+        "src/tasklib/models.py"
+      ],
+      "acs": [
+        "AC-1",
+        "AC-3",
+        "AC-4"
+      ]
+    },
+    {
+      "id": "store-clone",
+      "files": [
+        "src/tasklib/store.py"
+      ],
+      "acs": [
+        "AC-2",
+        "AC-3",
+        "AC-4"
+      ]
+    }
+  ],
+  "risks": [
+    "Task.copy must validate the current values, because direct attribute assignment skips validation. It must raise ValueError for invalid values without changing the original. Calling the Task constructor or to_dict on the current values does this, but the constructor strips the title, so the copy's title must not be written back to the original.",
+    "TaskStore.clone should reuse _snapshot and _restore, which already check key/ID mismatch and next_id. It must build every copy before returning, so a failure partway leaves the original untouched. It must also keep the original's insertion order, including gaps and non-ascending IDs.",
+    "_snapshot validates records with to_dict but returns plain dicts. Clone must build new Task objects from those records, or call Task.copy, so that no Task is shared with the original store.",
+    "An empty store must clone to an empty store with next_id 1. A store with gaps must keep the original next-ID counter, not one recomputed from the maximum ID.",
+    "Task.copy and TaskStore.clone must not alter the existing public API or the storage.py persistence behavior. Any cleanup shared with the save/load path could break existing tests, so storage.py is left unchanged."
+  ]
+}

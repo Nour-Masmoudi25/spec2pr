@@ -1,0 +1,76 @@
+{
+  "kind": "planner_run",
+  "finished": "2026-11-15T17:46:11.085718+00:00",
+  "results": [
+    {
+      "task": "T01",
+      "status": "skipped: plan already saved",
+      "attempts": 0,
+      "cost_usd": 0
+    },
+    {
+      "task": "T02",
+      "status": "accepted",
+      "attempts": 1,
+      "cost_usd": 0.034931,
+      "last_error": null
+    },
+    {
+      "task": "T03",
+      "status": "accepted",
+      "attempts": 1,
+      "cost_usd": 0.045878,
+      "last_error": null
+    },
+    {
+      "task": "T04",
+      "status": "accepted",
+      "attempts": 1,
+      "cost_usd": 0.028313,
+      "last_error": null
+    },
+    {
+      "task": "T05",
+      "status": "accepted",
+      "attempts": 1,
+      "cost_usd": 0.035731,
+      "last_error": null
+    },
+    {
+      "task": "T06",
+      "status": "accepted",
+      "attempts": 1,
+      "cost_usd": 0.035817,
+      "last_error": null
+    },
+    {
+      "task": "T07",
+      "status": "accepted",
+      "attempts": 1,
+      "cost_usd": 0.035762,
+      "last_error": null
+    },
+    {
+      "task": "T08",
+      "status": "accepted",
+      "attempts": 1,
+      "cost_usd": 0.034263,
+      "last_error": null
+    },
+    {
+      "task": "T09",
+      "status": "accepted",
+      "attempts": 1,
+      "cost_usd": 0.036346,
+      "last_error": null
+    },
+    {
+      "task": "T10",
+      "status": "accepted",
+      "attempts": 1,
+      "cost_usd": 0.029519,
+      "last_error": null
+    }
+  ],
+  "total_cost_usd": 0.31656
+}

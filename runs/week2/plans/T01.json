@@ -1,0 +1,27 @@
+{
+  "spec_id": "T01",
+  "tasks": [
+    {
+      "id": "add-filter-by-priority",
+      "files": [
+        "src/tasklib/store.py"
+      ],
+      "acs": [
+        "AC-1",
+        "AC-2",
+        "AC-3",
+        "AC-4",
+        "AC-5",
+        "AC-6",
+        "AC-7"
+      ]
+    }
+  ],
+  "risks": [
+    "Non-string inputs such as None, 1 or a list must raise ValueError. validate_priority covers this, but an unhashable value must not raise TypeError first.",
+    "Priority validation must run before iterating, so an invalid value raises ValueError even when the store is empty.",
+    "Task.priority is mutable and unvalidated. A task whose priority was edited directly to an invalid value should simply not match, and it must not raise an error.",
+    "The method must filter on self._tasks.values(), which is in insertion order. Restored stores can have non-ascending IDs, so sorting by ID would break creation order (AC-3).",
+    "The method must return a new list of the same live Task objects, not copies. It must not mutate the store or filter by completion state."
+  ]
+}

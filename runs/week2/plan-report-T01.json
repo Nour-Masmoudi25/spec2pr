@@ -1,0 +1,14 @@
+{
+  "kind": "planner_run",
+  "finished": "2026-11-15T17:43:07.459750+00:00",
+  "results": [
+    {
+      "task": "T01",
+      "status": "accepted",
+      "attempts": 1,
+      "cost_usd": 0.040901,
+      "last_error": null
+    }
+  ],
+  "total_cost_usd": 0.040901
+}

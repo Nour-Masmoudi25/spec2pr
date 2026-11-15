@@ -1,0 +1,34 @@
+{
+  "spec_id": "T07",
+  "tasks": [
+    {
+      "id": "task-priority-rank",
+      "files": [
+        "src/tasklib/models.py"
+      ],
+      "acs": [
+        "AC-1",
+        "AC-4"
+      ]
+    },
+    {
+      "id": "store-list-by-priority",
+      "files": [
+        "src/tasklib/store.py"
+      ],
+      "acs": [
+        "AC-2",
+        "AC-3",
+        "AC-4"
+      ]
+    }
+  ],
+  "risks": [
+    "Task attributes are mutated without validation, so priority_rank() must validate the priority at call time. It should reuse validate_priority, or an equivalent check that raises ValueError. A bare dict lookup would raise KeyError instead.",
+    "validate_priority may accept values that are not strictly low, medium or high, such as non-string types or unhashable values. The rank lookup must not raise TypeError or KeyError for those.",
+    "Ordering must be stable. Sort the dict's values, which are in insertion order, by descending rank. Do not reverse an ascending sort, because that would reverse the order of ties.",
+    "The method must not mutate tasks, the dict or _next_id. It must return a new list of the same Task objects, not copies.",
+    "If a directly mutated task has an invalid priority, list_by_priority should raise ValueError. It must do so before anything changes, which is easy because nothing is mutated.",
+    "I did not read validation.py or the existing tests. Existing public behavior (AC-4) depends on adding only new methods, with no changes to existing signatures."
+  ]
+}
