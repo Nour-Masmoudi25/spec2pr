@@ -131,3 +131,5 @@ configured Groq rates. The fair comparison needs a single agent on the same Clau
 model at the same budget (to do). The runs were made while `pipeline/run_team.py` and
 the role files were uncommitted (`working_tree_dirty: true` in each `result.json`) and
 committed unchanged in the commit above. Hand-off notes: [docs/team-handoff-notes.md](docs/team-handoff-notes.md).
+
+Model of row 1: every role ran on `claude-sonnet-5-5` (recorded in the `init` line of the transcripts in `runs/week2/team/`).

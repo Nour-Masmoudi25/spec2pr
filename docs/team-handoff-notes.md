@@ -52,3 +52,44 @@ implementer all passed (148). One run per task, one model.
   `result.json`); the files were committed unchanged afterwards.
 - Hooks: the stop gate is proven in a normal session, not in a subagent
   (`docs/live-hook-proof.md`). Here the implementer ran as a normal session.
+## Added after reading two transcripts (2026-11-16)
+
+- **Model:** every role ran on `claude-sonnet-5-5` (the `init` line of each transcript).
+- **T05 implementer: why its numbers are guesses.** It read the code, added the method
+  and the imports with the Edit tool, ran the visible tests once (138 passed) and replied.
+  Its report says 18 added lines, the real diff has 19. It could not have measured the
+  diff: the workspace has no git and its only allowed shell command is the test runner.
+  A number a role cannot measure will be guessed. Consequence for the contracts:
+  `diff_stat` should be computed by the orchestrator (it already is) and treated as
+  informational when a role writes it.
+- **T05 here versus T05 in Week 1.** The implementer put `lineterminator='\n'` into the
+  file with the Edit tool and it arrived intact. In Week 1 the single agent had only a
+  shell and wrote its code through a heredoc, where the `\n` became a real line break and
+  broke all three runs. So part of the Week 1 failure came from the tool interface, not
+  only from the model. This is an inference from one run, not a measured result.
+- **T02 tester: first attempt to write its test file through a shell heredoc was refused
+  by Claude Code's own safety check** ("brace with quote character"). The tester then used
+  the Write tool. One turn wasted. To do: tell the tester in `tester.md` to create files
+  with the Write tool, not the shell (not changed yet, so the evidence matches what ran).
+- **T02 tester: the prose before the JSON** was a status sentence ("Tests are written, and
+  the visible run shows 7 failing tests... I'm finalizing the plan now."), not content the
+  next role needs. The contract asks for the JSON object only, which is why it is logged.
+
+## Evidence for "decisions stay in one place" (for ARCHITECTURE.md)
+
+Three times in these runs a role stated a fact that was measured differently. Each time
+the measured value, owned by the orchestrator, was the one to trust:
+
+1. **Paths.** The planner wrote `target_repo/src/...` because that is where it found the
+   file; the spec and the validator count paths from the library root (`src/tasklib/`). If
+   the planner and the implementer each chose the convention, they would disagree. The
+   convention is now fixed once, in the planner prompt written by the orchestrator, and the
+   implementer's guard accepts both layouts.
+2. **Test counts.** The T01 tester said 16 new tests fail and listed 17 ids; the
+   orchestrator's own run measured 20 failing and 21 new tests.
+3. **Diff size.** The T05 implementer reported 18 added lines; the real diff has 19.
+
+What this supports: measurement and acceptance decisions (paths, counts, diff, test
+results) belong to one owner, the orchestrator, because the roles' own numbers are
+estimates. What it does not show: no run produced a conflict between two implementers, so
+the argument about file ownership between parallel implementers is untested here.
