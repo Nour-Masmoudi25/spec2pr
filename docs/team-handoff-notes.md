@@ -74,3 +74,22 @@ implementer all passed (148). One run per task, one model.
 - **T02 tester: the prose before the JSON** was a status sentence ("Tests are written, and
   the visible run shows 7 failing tests... I'm finalizing the plan now."), not content the
   next role needs. The contract asks for the JSON object only, which is why it is logged.
+
+## Evidence for "decisions stay in one place" (for ARCHITECTURE.md)
+
+Three times in these runs a role stated a fact that was measured differently. Each time
+the measured value, owned by the orchestrator, was the one to trust:
+
+1. **Paths.** The planner wrote `target_repo/src/...` because that is where it found the
+   file; the spec and the validator count paths from the library root (`src/tasklib/`). If
+   the planner and the implementer each chose the convention, they would disagree. The
+   convention is now fixed once, in the planner prompt written by the orchestrator, and the
+   implementer's guard accepts both layouts.
+2. **Test counts.** The T01 tester said 16 new tests fail and listed 17 ids; the
+   orchestrator's own run measured 20 failing and 21 new tests.
+3. **Diff size.** The T05 implementer reported 18 added lines; the real diff has 19.
+
+What this supports: measurement and acceptance decisions (paths, counts, diff, test
+results) belong to one owner, the orchestrator, because the roles' own numbers are
+estimates. What it does not show: no run produced a conflict between two implementers, so
+the argument about file ownership between parallel implementers is untested here.
