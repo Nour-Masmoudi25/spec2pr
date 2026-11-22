@@ -51,14 +51,15 @@ def run_one(task_dir, index, out_root, work_parent):
     try:
         rt.preflight(rt.IMAGE)
         base, workspace = rt.build_workspace(metadata, work_root)
-        text = (rt.ROOT / ".claude" / "agents" / "solo.md").read_text(encoding="utf-8")
-        (workspace / ".claude" / "agents" / "solo.md").write_text(text, encoding="utf-8", newline="\n")
+        for role_name in ("solo", "probe"):
+            role_text = (rt.ROOT / ".claude" / "agents" / (role_name + ".md")).read_text(encoding="utf-8")
+            (workspace / ".claude" / "agents" / (role_name + ".md")).write_text(role_text, encoding="utf-8", newline="\n")
         settings_path = work_root / "solo-hooks.json"
         settings_path.write_text(json.dumps(rt.HOOK_SETTINGS, indent=2), encoding="utf-8")
         base_tree = rt.tree(base)
         result["visible_baseline"] = rt.run_visible(workspace)
 
-        probe = rt.call_role("solo", rt.PROBE_PROMPT, workspace, rt.PROBE_TOOLS, out / "00-hook-selftest.jsonl",
+        probe = rt.call_role("probe", rt.PROBE_PROMPT, workspace, rt.PROBE_TOOLS, out / "00-hook-selftest.jsonl",
                              settings=settings_path)
         spend("hook_selftest", probe)
         log = out / "00-hook-selftest.jsonl"
@@ -104,6 +105,10 @@ def run_one(task_dir, index, out_root, work_parent):
 
 def summary(folder):
     rows = [json.loads(p.read_text(encoding="utf-8")) for p in sorted(folder.glob("T*-*/result.json"))]
+    stopped = [r for r in rows if r["status"] not in ("passed", "failed_tests")]
+    rows = [r for r in rows if r["status"] in ("passed", "failed_tests")]
+    if stopped:
+        print("not graded (stopped or error): %s" % ", ".join("%s-%d" % (r["task"], r["run"]) for r in stopped))
     if not rows:
         print("no results in", folder)
         return 1
