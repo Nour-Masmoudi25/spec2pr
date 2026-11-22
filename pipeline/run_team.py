@@ -328,9 +328,9 @@ def run_team(task_dir, plans_dir, out_root, work_parent):
                 return stop("implementer", "the implementer changed files outside src/tasklib/: %s" % outside)
             now = tree(workspace)
             actual = {}
-            for file_name in changed(base_tree, now):
+            for file_name in changed(snapshot, now):
                 if file_name.startswith("src/tasklib/"):
-                    added, removed, _ = diff_of(file_name, base_tree.get(file_name), now.get(file_name))
+                    added, removed, _ = diff_of(file_name, snapshot.get(file_name), now.get(file_name))
                     actual[file_name] = (added, removed)
             claimed = {d["file"]: (d["added"], d["removed"]) for d in report["diff_stat"]}
             if claimed != actual:
