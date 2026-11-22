@@ -1,0 +1,47 @@
+{
+  "task": "T08",
+  "commit": "f9aa7208bc21f042c2be5f07020d0264a5fe8205",
+  "working_tree_dirty": false,
+  "status": "passed",
+  "workspace": "C:\\Users\\LENOVO\\spec2pr-workspaces\\T08-20261122T191447",
+  "budget_usd": 1.0,
+  "observations": [
+    "Task storage-string-api: the implementation report does not match the real diff. claimed={'src/tasklib/storage.py': (31, 3)} actual={'src/tasklib/storage.py': (32, 4)}",
+    "Task export-string-api: the implementation report does not match the real diff. claimed={'src/tasklib/__init__.py': (8, 2)} actual={'src/tasklib/__init__.py': (9, 2)}"
+  ],
+  "visible_baseline": {
+    "exit_code": 0,
+    "passed": 127,
+    "failed": 0
+  },
+  "hook_selftest": {
+    "file_written": false,
+    "refusal_seen": true
+  },
+  "visible_after_tester": {
+    "exit_code": 1,
+    "passed": 129,
+    "failed": 39
+  },
+  "visible_after_implementer": {
+    "exit_code": 0,
+    "passed": 168,
+    "failed": 0
+  },
+  "f2p": {
+    "pass": 18,
+    "fail": 0
+  },
+  "p2p": {
+    "pass": 127,
+    "fail": 0
+  },
+  "review_verdict": "approve",
+  "costs_usd": {
+    "hook_selftest": 0.007276,
+    "tester": 0.136153,
+    "implementer": 0.139329,
+    "reviewer": 0.037789
+  },
+  "total_cost_usd": 0.320547
+}
