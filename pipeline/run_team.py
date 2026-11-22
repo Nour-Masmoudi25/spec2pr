@@ -148,7 +148,7 @@ def build_workspace(metadata, work_root):
     prepare_baseline(metadata, ROOT / "target_repo", base)
     copy_baseline(base, workspace)
     (workspace / ".claude" / "agents").mkdir(parents=True)
-    for name in ("planner", "tester", "implementer", "reviewer"):
+    for name in ("planner", "tester", "implementer", "reviewer", "probe"):
         text = (ROOT / ".claude" / "agents" / (name + ".md")).read_text(encoding="utf-8")
         if name == "implementer":
             text = re.sub(r"^hooks:\n(?:[ \t]+.*\n)+", "", text, flags=re.M)
@@ -274,7 +274,7 @@ def run_team(task_dir, plans_dir, out_root, work_parent):
         base_tree = tree(base)
         result["visible_baseline"] = run_visible(workspace)
 
-        probe = call_role("implementer", PROBE_PROMPT, workspace, PROBE_TOOLS, out / "00-hook-selftest.jsonl",
+        probe = call_role("probe", PROBE_PROMPT, workspace, PROBE_TOOLS, out / "00-hook-selftest.jsonl",
                           settings=settings_path)
         spend("hook_selftest", probe)
         written = (workspace / "tests" / "hook_probe.py").exists()
