@@ -1,0 +1,28 @@
+--- a/src/tasklib/models.py
++++ b/src/tasklib/models.py
+@@ -57,4 +57,8 @@
+         }
+ 
++    def copy(self) -> "Task":
++        """Return an independent validated copy; the original is untouched."""
++        return Task.from_dict(self.to_dict())
++
+     @classmethod
+     def from_dict(cls, data: object) -> "Task":
+--- a/src/tasklib/store.py
++++ b/src/tasklib/store.py
+@@ -124,4 +124,14 @@
+         return pending
+ 
++    def clone(self) -> "TaskStore":
++        """Return an independent store with copied tasks, order and counter.
++
++        Invalid values or ID mismatches raise ValueError; the original is
++        never modified.
++        """
++        snapshot = self._snapshot()
++        tasks = [Task.from_dict(record) for record in snapshot["tasks"]]
++        return self._restore(tasks, snapshot["next_id"])
++
+     def _snapshot(self) -> dict:
+         """Create a validated persistence document without mutating the store.

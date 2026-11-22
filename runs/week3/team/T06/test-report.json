@@ -1,0 +1,12 @@
+{
+  "spec_id": "T06",
+  "lint": "not_run",
+  "f2p": {
+    "pass": 11,
+    "fail": 0
+  },
+  "p2p": {
+    "pass": 127,
+    "fail": 0
+  }
+}

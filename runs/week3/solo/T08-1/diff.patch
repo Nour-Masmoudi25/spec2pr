@@ -1,0 +1,44 @@
+--- a/src/tasklib/__init__.py
++++ b/src/tasklib/__init__.py
+@@ -33,5 +33,12 @@
+ from .models import Task
+ from .store import TaskStore
+-from .storage import load_store, save_store
++from .storage import dumps_store, load_store, loads_store, save_store
+ 
+-__all__ = ["Task", "TaskStore", "load_store", "save_store"]
++__all__ = [
++    "Task",
++    "TaskStore",
++    "dumps_store",
++    "load_store",
++    "loads_store",
++    "save_store",
++]
+--- a/src/tasklib/storage.py
++++ b/src/tasklib/storage.py
+@@ -106,4 +106,24 @@
+ 
+ 
++def dumps_store(store: TaskStore) -> str:
++    """Return the version-1 JSON text for a store without touching files."""
++    if not isinstance(store, TaskStore):
++        raise ValueError("Store must be a TaskStore")
++    document = store._snapshot()
++    return json.dumps(document, ensure_ascii=False, indent=2, allow_nan=False)
++
++
++def loads_store(text: str) -> TaskStore:
++    """Parse version-1 JSON text into a new independent store."""
++    if not isinstance(text, str):
++        raise ValueError("Text must be a str")
++    document = json.loads(
++        text,
++        object_pairs_hook=_unique_object,
++        parse_constant=_reject_constant,
++    )
++    return _decode_document(document)
++
++
+ def save_store(store: TaskStore, path: str | os.PathLike[str]) -> None:
+     """Save a validated store as UTF-8 JSON, replacing an existing file.

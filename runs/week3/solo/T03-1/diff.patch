@@ -1,0 +1,14 @@
+--- a/src/tasklib/store.py
++++ b/src/tasklib/store.py
+@@ -46,4 +46,11 @@
+         """
+         return self._tasks[validate_id(task_id)]
++
++    def delete(self, task_id: int) -> Task:
++        """Remove and return the task; the next-ID counter is unchanged."""
++        key = validate_id(task_id)
++        if key not in self._tasks:
++            raise KeyError(key)
++        return self._tasks.pop(key)
+ 
+     def list_tasks(self) -> list[Task]:

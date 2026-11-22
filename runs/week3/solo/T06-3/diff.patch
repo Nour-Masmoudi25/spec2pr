@@ -1,0 +1,25 @@
+--- a/src/tasklib/models.py
++++ b/src/tasklib/models.py
+@@ -57,4 +57,8 @@
+         }
+ 
++    def copy(self) -> "Task":
++        """Return an independent validated copy; the original is untouched."""
++        return Task.from_dict(self.to_dict())
++
+     @classmethod
+     def from_dict(cls, data: object) -> "Task":
+--- a/src/tasklib/store.py
++++ b/src/tasklib/store.py
+@@ -142,4 +142,11 @@
+         return {"version": 1, "next_id": next_id, "tasks": records}
+ 
++    def clone(self) -> "TaskStore":
++        """Return an independent validated copy of this store."""
++        doc = self._snapshot()
++        return self._restore(
++            [Task.from_dict(r) for r in doc["tasks"]], doc["next_id"]
++        )
++
+     @classmethod
+     def _restore(cls, tasks: list[Task], next_id: int) -> "TaskStore":

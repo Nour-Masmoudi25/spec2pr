@@ -1,0 +1,32 @@
+--- a/src/tasklib/store.py
++++ b/src/tasklib/store.py
+@@ -124,4 +124,29 @@
+         return pending
+ 
++    def rename_many(self, updates: list[dict]) -> list[Task]:
++        """Rename several tasks atomically, returning them in request order."""
++        if not isinstance(updates, list):
++            raise ValueError("Updates must be a list of dictionaries")
++        pending = []
++        seen = set()
++        for offset, item in enumerate(updates):
++            record = validate_fields(
++                item, {"id", "title"}, name=f"Batch entry {offset}"
++            )
++            task_id = validate_id(record["id"])
++            title = validate_title(record["title"])
++            if task_id in seen:
++                raise ValueError(f"Duplicate task ID: {task_id}")
++            seen.add(task_id)
++            pending.append((task_id, title))
++        tasks = []
++        for task_id, _ in pending:
++            if task_id not in self._tasks:
++                raise KeyError(task_id)
++            tasks.append(self._tasks[task_id])
++        for task, (_, title) in zip(tasks, pending):
++            task.title = title
++        return tasks
++
+     def _snapshot(self) -> dict:
+         """Create a validated persistence document without mutating the store.

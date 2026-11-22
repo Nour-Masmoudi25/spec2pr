@@ -133,3 +133,50 @@ the role files were uncommitted (`working_tree_dirty: true` in each `result.json
 committed unchanged in the commit above. Hand-off notes: [docs/team-handoff-notes.md](docs/team-handoff-notes.md).
 
 Model of row 1: every role ran on `claude-sonnet-5-5` (recorded in the `init` line of the transcripts in `runs/week2/team/`).
+
+
+## Row 2: single Claude agent, same model, tools and hooks as the team (Week 3)
+
+| Row | Agent | Tasks x runs | Pass rate | Median cost per run (USD) | Total cost (USD) | Date | Commit |
+|---|---|---|---|---|---|---|---|
+| 2 | Single agent (Claude Code, `solo` role file, `sonnet`) | 5 x 3 | **15/15 (100%)** | 0.0391 | 0.6009 | 2026-11-22 | `c8b57bc` |
+
+Same Claude model, same tools, same hooks, same clean workspace and same hidden-test
+grader as the team's implementer. It does not have the planner's plan, the tester's
+tests or the reviewer. Run with `python -m pipeline.run_single` (results in
+`runs/week3/solo/`). Cost is the `total_cost_usd` reported by Claude Code and includes a
+hook self-test of about 0.007 USD per run. Medians: 6 turns per run.
+
+On these five tasks the single agent passes as often as the team (row 1: 5/5) at about
+a quarter of the median cost per task (0.161 vs 0.039 USD). This does not show that the
+team is useless: the tasks are small and may be too easy to tell the agents apart (every
+agent that uses Claude passes everything), the team ran once per task against three runs
+here, and the team cost excludes the planner (about 0.04 USD per plan). The next test
+needs harder tasks (T06 to T10) and the same number of runs for both.
+
+
+## Rows 1 and 2 on ten tasks: team vs single Claude agent (Week 3)
+
+| Row | Agent | Tasks x runs | Pass rate | Median cost per run (USD) | Total cost (USD) |
+|---|---|---|---|---|---|
+| 1 | Team: planner, tester, implementer, reviewer (Claude Code, `sonnet`) | 10 x 1 | **10/10 (100%)** | 0.1647 | 1.9345 |
+| 2 | Single agent (Claude Code, `solo` role file, `sonnet`) | 10 x 3 | **30/30 (100%)** | 0.0445 | 1.2778 |
+
+Same Claude model, tools, hooks, clean workspace and hidden-test grader. The single
+agent has no plan, tester or reviewer. Team costs exclude the planner (about 0.36 USD
+for ten plans) and include a hook self-test of about 0.007 USD per run; single-agent
+costs include the same self-test. Team runs T01-T05 are from Week 2 (`runs/week2/team/`),
+T06-T10 from Week 3 (`runs/week3/team/`); single-agent runs are in `runs/week3/solo/`.
+
+Both reach 100%. The team costs about 3.7 times more per run at the median, and about
+4.5 times more to pass the ten tasks once (1.93 vs about 0.43 USD). The tester is the
+most expensive role on T09 and T10. This does not show that the team is useless: the
+tasks are small and probably too easy to separate the agents, the team ran once per
+task against three runs, and the reviewer's value (catching defects tests miss) is not
+measured here. Harder tasks and planted defects are needed.
+
+Note: the Week 2 team runs (T01-T05) used an earlier hook self-test that went through
+the implementer role. From Week 3 the self-test uses a neutral `probe` role for both
+agents; roles, prompts and grading are unchanged. The `diff_stat` observation on T06 comes
+from an orchestrator bug (the second task's report was compared with the diff since the
+start); it is fixed in the commit that follows.

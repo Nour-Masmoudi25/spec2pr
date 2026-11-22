@@ -148,7 +148,7 @@ def build_workspace(metadata, work_root):
     prepare_baseline(metadata, ROOT / "target_repo", base)
     copy_baseline(base, workspace)
     (workspace / ".claude" / "agents").mkdir(parents=True)
-    for name in ("planner", "tester", "implementer", "reviewer"):
+    for name in ("planner", "tester", "implementer", "reviewer", "probe"):
         text = (ROOT / ".claude" / "agents" / (name + ".md")).read_text(encoding="utf-8")
         if name == "implementer":
             text = re.sub(r"^hooks:\n(?:[ \t]+.*\n)+", "", text, flags=re.M)
@@ -274,7 +274,7 @@ def run_team(task_dir, plans_dir, out_root, work_parent):
         base_tree = tree(base)
         result["visible_baseline"] = run_visible(workspace)
 
-        probe = call_role("implementer", PROBE_PROMPT, workspace, PROBE_TOOLS, out / "00-hook-selftest.jsonl",
+        probe = call_role("probe", PROBE_PROMPT, workspace, PROBE_TOOLS, out / "00-hook-selftest.jsonl",
                           settings=settings_path)
         spend("hook_selftest", probe)
         written = (workspace / "tests" / "hook_probe.py").exists()
@@ -328,9 +328,9 @@ def run_team(task_dir, plans_dir, out_root, work_parent):
                 return stop("implementer", "the implementer changed files outside src/tasklib/: %s" % outside)
             now = tree(workspace)
             actual = {}
-            for file_name in changed(base_tree, now):
+            for file_name in changed(snapshot, now):
                 if file_name.startswith("src/tasklib/"):
-                    added, removed, _ = diff_of(file_name, base_tree.get(file_name), now.get(file_name))
+                    added, removed, _ = diff_of(file_name, snapshot.get(file_name), now.get(file_name))
                     actual[file_name] = (added, removed)
             claimed = {d["file"]: (d["added"], d["removed"]) for d in report["diff_stat"]}
             if claimed != actual:

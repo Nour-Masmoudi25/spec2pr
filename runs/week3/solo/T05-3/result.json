@@ -1,0 +1,40 @@
+{
+  "task": "T05",
+  "run": 3,
+  "agent": "solo",
+  "commit": "c8b57bcaed3fc1e77109022f1169be6d86ca58ac",
+  "working_tree_dirty": false,
+  "status": "passed",
+  "workspace": "C:\\Users\\LENOVO\\spec2pr-workspaces\\T05-solo3-20261122T184729",
+  "budget_usd": 1.0,
+  "observations": [],
+  "visible_baseline": {
+    "exit_code": 0,
+    "passed": 127,
+    "failed": 0
+  },
+  "hook_selftest": {
+    "file_written": false,
+    "refusal_seen": true
+  },
+  "turns": 6,
+  "seconds": 14.5,
+  "visible_after": {
+    "exit_code": 0,
+    "passed": 127,
+    "failed": 0
+  },
+  "f2p": {
+    "pass": 11,
+    "fail": 0
+  },
+  "p2p": {
+    "pass": 127,
+    "fail": 0
+  },
+  "costs_usd": {
+    "hook_selftest": 0.007397,
+    "solo": 0.035596
+  },
+  "total_cost_usd": 0.042993
+}

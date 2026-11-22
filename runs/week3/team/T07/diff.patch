@@ -1,0 +1,26 @@
+--- a/src/tasklib/models.py
++++ b/src/tasklib/models.py
+@@ -57,4 +57,8 @@
+         }
+ 
++    def priority_rank(self) -> int:
++        """Return 0, 1 or 2 for low, medium or high; ValueError if invalid."""
++        return {"low": 0, "medium": 1, "high": 2}[validate_priority(self.priority)]
++
+     @classmethod
+     def from_dict(cls, data: object) -> "Task":
+--- a/src/tasklib/store.py
++++ b/src/tasklib/store.py
+@@ -54,4 +54,12 @@
+         """
+         return list(self._tasks.values())
++
++    def list_by_priority(self) -> list[Task]:
++        """Return a fresh list of live tasks from high to low priority.
++
++        Ties keep creation order. Nothing in the store is modified, and an
++        invalid directly mutated priority raises ValueError.
++        """
++        return sorted(self._tasks.values(), key=lambda t: -t.priority_rank())
+ 
+     def complete(self, task_id: int) -> Task:

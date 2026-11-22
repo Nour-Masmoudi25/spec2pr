@@ -1,0 +1,14 @@
+--- a/src/tasklib/store.py
++++ b/src/tasklib/store.py
+@@ -54,4 +54,11 @@
+         """
+         return list(self._tasks.values())
++
++    def paginate(self, offset: int = 0, limit: int = 10) -> list[Task]:
++        """Return up to limit live tasks starting at offset, in creation order."""
++        for value in (offset, limit):
++            if type(value) is not int or value < 0:
++                raise ValueError("Offset and limit must be nonnegative integers")
++        return list(self._tasks.values())[offset : offset + limit]
+ 
+     def complete(self, task_id: int) -> Task:

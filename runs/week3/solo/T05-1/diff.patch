@@ -1,0 +1,27 @@
+--- a/src/tasklib/store.py
++++ b/src/tasklib/store.py
+@@ -124,4 +124,24 @@
+         return pending
+ 
++    def to_csv(self) -> str:
++        """Return tasks as CSV text (header plus one row per task, \\n ends)."""
++
++        def quote(value: object) -> str:
++            text = str(value)
++            if any(ch in text for ch in ',"\r\n'):
++                text = '"' + text.replace('"', '""') + '"'
++            return text
++
++        lines = ["id,title,priority,completed\n"]
++        for task in self._tasks.values():
++            done = "true" if task.completed else "false"
++            lines.append(
++                ",".join(
++                    [quote(task.id), quote(task.title), quote(task.priority), done]
++                )
++                + "\n"
++            )
++        return "".join(lines)
++
+     def _snapshot(self) -> dict:
+         """Create a validated persistence document without mutating the store.

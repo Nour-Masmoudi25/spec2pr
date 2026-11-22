@@ -1,0 +1,46 @@
+{
+  "task": "T06",
+  "commit": "77b2aa37886e6c1e64646b8d59460ef1b6dd0736",
+  "working_tree_dirty": false,
+  "status": "passed",
+  "workspace": "C:\\Users\\LENOVO\\spec2pr-workspaces\\T06-20261122T191008",
+  "budget_usd": 1.0,
+  "observations": [
+    "Task store-clone: the implementation report does not match the real diff. claimed={'src/tasklib/store.py': (10, 0)} actual={'src/tasklib/models.py': (4, 0), 'src/tasklib/store.py': (10, 0)}"
+  ],
+  "visible_baseline": {
+    "exit_code": 0,
+    "passed": 127,
+    "failed": 0
+  },
+  "hook_selftest": {
+    "file_written": false,
+    "refusal_seen": true
+  },
+  "visible_after_tester": {
+    "exit_code": 1,
+    "passed": 128,
+    "failed": 14
+  },
+  "visible_after_implementer": {
+    "exit_code": 0,
+    "passed": 142,
+    "failed": 0
+  },
+  "f2p": {
+    "pass": 11,
+    "fail": 0
+  },
+  "p2p": {
+    "pass": 127,
+    "fail": 0
+  },
+  "review_verdict": "approve",
+  "costs_usd": {
+    "hook_selftest": 0.007274,
+    "tester": 0.092246,
+    "implementer": 0.108851,
+    "reviewer": 0.049398
+  },
+  "total_cost_usd": 0.257769
+}

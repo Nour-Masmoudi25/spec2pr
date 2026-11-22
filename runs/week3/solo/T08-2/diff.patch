@@ -1,0 +1,42 @@
+--- a/src/tasklib/__init__.py
++++ b/src/tasklib/__init__.py
+@@ -33,5 +33,12 @@
+ from .models import Task
+ from .store import TaskStore
+-from .storage import load_store, save_store
++from .storage import dumps_store, load_store, loads_store, save_store
+ 
+-__all__ = ["Task", "TaskStore", "load_store", "save_store"]
++__all__ = [
++    "Task",
++    "TaskStore",
++    "dumps_store",
++    "load_store",
++    "loads_store",
++    "save_store",
++]
+--- a/src/tasklib/storage.py
++++ b/src/tasklib/storage.py
+@@ -147,2 +147,22 @@
+         )
+     return _decode_document(document)
++
++
++def dumps_store(store: TaskStore) -> str:
++    """Return the validated version-1 JSON document as a string."""
++    if not isinstance(store, TaskStore):
++        raise ValueError("Store must be a TaskStore")
++    document = store._snapshot()
++    return json.dumps(document, ensure_ascii=False, indent=2, allow_nan=False)
++
++
++def loads_store(text: str) -> TaskStore:
++    """Parse a version-1 JSON string into an independent store."""
++    if not isinstance(text, str):
++        raise ValueError("Text must be a str")
++    document = json.loads(
++        text,
++        object_pairs_hook=_unique_object,
++        parse_constant=_reject_constant,
++    )
++    return _decode_document(document)

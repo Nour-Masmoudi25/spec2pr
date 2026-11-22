@@ -1,0 +1,18 @@
+--- a/src/tasklib/store.py
++++ b/src/tasklib/store.py
+@@ -54,4 +54,15 @@
+         """
+         return list(self._tasks.values())
++
++    def paginate(self, offset: int = 0, limit: int = 10) -> list[Task]:
++        """Return a fresh list of live tasks in creation order, windowed.
++
++        Both arguments must be nonnegative integers (bool is rejected);
++        otherwise ValueError is raised. The store is never modified.
++        """
++        for name, value in (("Offset", offset), ("Limit", limit)):
++            if isinstance(value, bool) or not isinstance(value, int) or value < 0:
++                raise ValueError(f"{name} must be a nonnegative integer")
++        return list(self._tasks.values())[offset : offset + limit]
+ 
+     def complete(self, task_id: int) -> Task:
