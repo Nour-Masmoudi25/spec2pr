@@ -1,0 +1,13 @@
+--- a/src/tasklib/store.py
++++ b/src/tasklib/store.py
+@@ -54,4 +54,10 @@
+         """
+         return list(self._tasks.values())
++
++    def summary(self) -> dict[str, int]:
++        """Return a fresh dict of total, completed and pending counts."""
++        total = len(self._tasks)
++        completed = sum(1 for t in self._tasks.values() if t.completed is True)
++        return {"total": total, "completed": completed, "pending": total - completed}
+ 
+     def complete(self, task_id: int) -> Task:

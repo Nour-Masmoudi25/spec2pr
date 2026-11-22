@@ -1,0 +1,14 @@
+--- a/src/tasklib/store.py
++++ b/src/tasklib/store.py
+@@ -54,4 +54,11 @@
+         """
+         return list(self._tasks.values())
++
++    def search(self, query: str) -> list[Task]:
++        """Return tasks whose casefolded title contains the casefolded query."""
++        if not isinstance(query, str):
++            raise ValueError("query must be a string")
++        needle = query.casefold()
++        return [t for t in self._tasks.values() if needle in t.title.casefold()]
+ 
+     def complete(self, task_id: int) -> Task:

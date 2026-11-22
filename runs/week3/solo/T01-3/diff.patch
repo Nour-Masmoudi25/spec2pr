@@ -1,0 +1,12 @@
+--- a/src/tasklib/store.py
++++ b/src/tasklib/store.py
+@@ -54,4 +54,9 @@
+         """
+         return list(self._tasks.values())
++
++    def filter_by_priority(self, priority: str) -> list[Task]:
++        """Return a new list of tasks with the given priority, in creation order."""
++        validate_priority(priority)
++        return [t for t in self._tasks.values() if t.priority == priority]
+ 
+     def complete(self, task_id: int) -> Task:

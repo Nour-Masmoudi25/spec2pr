@@ -1,0 +1,27 @@
+--- a/src/tasklib/store.py
++++ b/src/tasklib/store.py
+@@ -124,4 +124,24 @@
+         return pending
+ 
++    def to_csv(self) -> str:
++        """Return all tasks as CSV text in creation order, without mutation."""
++        import csv
++        import io
++
++        out = io.StringIO(newline="")
++        writer = csv.writer(
++            out, delimiter=",", quotechar='"', lineterminator="\n",
++            quoting=csv.QUOTE_MINIMAL,
++        )
++        writer.writerow(["id", "title", "priority", "completed"])
++        for task in self._tasks.values():
++            writer.writerow([
++                task.id,
++                task.title,
++                task.priority,
++                "true" if task.completed else "false",
++            ])
++        return out.getvalue()
++
+     def _snapshot(self) -> dict:
+         """Create a validated persistence document without mutating the store.

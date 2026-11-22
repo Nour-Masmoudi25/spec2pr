@@ -1,0 +1,13 @@
+--- a/src/tasklib/store.py
++++ b/src/tasklib/store.py
+@@ -124,4 +124,10 @@
+         return pending
+ 
++    def summary(self) -> dict[str, int]:
++        """Return a fresh dict with total, completed and pending counts."""
++        total = len(self._tasks)
++        completed = sum(1 for t in self._tasks.values() if t.completed is True)
++        return {"total": total, "completed": completed, "pending": total - completed}
++
+     def _snapshot(self) -> dict:
+         """Create a validated persistence document without mutating the store.
