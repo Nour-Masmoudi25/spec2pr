@@ -1,0 +1,23 @@
+--- a/src/tasklib/models.py
++++ b/src/tasklib/models.py
+@@ -43,4 +43,9 @@
+         self.title = title
+ 
++    def priority_rank(self) -> int:
++        """Return 0, 1 or 2 for low, medium or high; ValueError otherwise."""
++        priority = validate_priority(self.priority)
++        return {"low": 0, "medium": 1, "high": 2}[priority]
++
+     def to_dict(self) -> dict[str, Any]:
+         """Return a fresh validated record containing all four fields.
+--- a/src/tasklib/store.py
++++ b/src/tasklib/store.py
+@@ -54,4 +54,8 @@
+         """
+         return list(self._tasks.values())
++
++    def list_by_priority(self) -> list[Task]:
++        """Return a fresh list, high to low priority, creation order on ties."""
++        return sorted(self._tasks.values(), key=lambda t: -t.priority_rank())
+ 
+     def complete(self, task_id: int) -> Task:
